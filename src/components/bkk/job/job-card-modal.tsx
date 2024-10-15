@@ -15,7 +15,6 @@ const Modal = ({
   const [school, setSchool] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
-  //   const [file, setFile] = useState<File | null>(null);
   const handleSubmit = () => {
     closeModal();
   };
@@ -29,7 +28,7 @@ const Modal = ({
       >
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-semibold uppercase line-clamp-1">
-            Lamar Pekerjaan {vacancy.loker_type}
+            Lamar Pekerjaan {vacancy.loker_description}
           </h1>
           <button
             onClick={closeModal}
@@ -127,7 +126,6 @@ const Modal = ({
             <label className="block text-sm mb-2">File Ijazah</label>
             <input
               type="file"
-              //   onChange={(e) => setFile(e.target.files?.[0] || null)}
               className="w-full p-2 border rounded"
               accept=".pdf,.doc,.docx,.jpg,.png"
               required

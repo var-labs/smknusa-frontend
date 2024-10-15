@@ -17,7 +17,6 @@ const NavigationSearchResult = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const { searches, isSearchLoading } = useSearches({ query: searchQuery });
-  // const [searchRecent, setSearchRecent] = useState([]);
 
   useEffect(() => {
     if (!searchToggle) return;
