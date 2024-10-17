@@ -17,6 +17,11 @@ const StudentsTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
 
+  const [checkedAll, setCheckedAll] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<boolean[]>(
+    new Array(studentsData?.length || 0).fill(false)
+  );
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentStudentsData = studentsData?.slice(
@@ -28,24 +33,42 @@ const StudentsTable = ({
     setCurrentPage(pageNumber);
   };
 
+  const handleCheckAll = () => {
+    const isChecked = !checkedAll;
+    setCheckedAll(isChecked);
+    setCheckedItems(new Array(currentStudentsData?.length || 0).fill(isChecked));
+  }
+
+  const handleCheckItem = (index: number) => {
+    const updatedCheckedItems = [...checkedItems];
+    updatedCheckedItems[index] = !updatedCheckedItems[index];
+    setCheckedItems(updatedCheckedItems);
+  }
+
   return (
-    <div className="relative flex flex-col  1xl:rounded-lg border w-full">
-      <div className="flex  items-center justify-between mx-4 1xl:mx-12 gap-4">
-        <div className="flex w-full  items-center justify-between 1xl:justify-start  gap-4">
+    <div className="relative flex flex-col 1xl:rounded-lg border w-full">
+      <div className="flex items-center justify-between mx-4 1xl:mx-12 gap-4">
+        <div className="flex w-full flex-col md:flex-row items-start md:items-center justify-between 1xl:justify-start gap-2">
           <Heading
             type="h5"
-            className="!text-sm font-bold text-blue-base  1xl:w-fit  my-6"
+            className="!text-sm font-bold text-blue-base 1xl:w-fit my-6"
           >
             Peserta Didik
           </Heading>
           <Heading
             type="h5"
-            className="!text-xs bg-amber-100 bg-opacity-70 border-yellow px-3 py-0.5 border rounded-full text-yellow-500"
+            className="!text-xs bg-amber-100 bg-opacity-70 border-yellow px-3 py-0.5 border rounded-full text-yellow-500 -mt-6 md:mt-0 mb-7 md:mb-0  sm:mr-12 2xl:mr-0"
           >
             {studentsData?.length + " " + "orang"}
           </Heading>
         </div>
-        <ResidentDropdownChange handleChangeTable={handleChangeTable} />
+
+          <button type="button" className="bg-yellow-light rounded-lg -mt-10 md:mt-0 px-5 py-2 xl:px-7 xl:py-2 mr-10 lg:mr-12">
+            Cetak
+          </button>
+        <div className="-mt-16 md:-mt-6">
+          <ResidentDropdownChange handleChangeTable={handleChangeTable} />
+        </div>
       </div>
 
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -57,6 +80,8 @@ const StudentsTable = ({
                   id="checkbox-all"
                   type="checkbox"
                   className="w-4 h-4  bg-gray-100 border-gray-300 rounded focus:ring-yellow  ring-offset-gray-800 focus:ring-offset-gray-800 focus:ring-2 "
+                  checked={checkedAll}
+                  onChange={handleCheckAll}
                 />
                 <label htmlFor="checkbox-all" className="sr-only">
                   checkbox
@@ -95,6 +120,8 @@ const StudentsTable = ({
                           id={`checkbox-table-${index}`}
                           type="checkbox"
                           className="w-4 h-4 bg-gray-100 border-gray-300 rounded focus:ring-yellow ring-offset-gray-800 focus:ring-offset-gray-800 focus:ring-2"
+                          checked={checkedItems[index]}
+                          onChange={() => handleCheckItem}
                         />
                         <label
                           htmlFor={`checkbox-table-${index}`}

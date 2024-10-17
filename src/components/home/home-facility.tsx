@@ -64,9 +64,7 @@ const HomeFacility = () => {
         </Heading>
 
         <Paragraph className=" text-sm xl:text-lg lg:text-[14px] mt-[12px] w-full 1xl:w-2/3 lg:text-center max-w-[274px] xs:max-w-xs-content sm:max-w-sm-content md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container">
-          Di SMK Negeri 1 Purwosari, kami akan memberikan pengalaman terbaik
-          dalam kegiatan belajar mengajar yang menyongsong kurikulum merdeka
-          belajar. Dengan dilengkapi fasilitas yang berqualitas, mampu
+          Dengan dilengkapi fasilitas yang berqualitas, mampu
           menyongsong kebutuhan siswa untuk belajar.
         </Paragraph>
 

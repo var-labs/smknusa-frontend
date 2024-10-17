@@ -39,15 +39,26 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
+const getCategoryColor = (icon : string) => {
+  switch (icon) {
+    case "Teknologi Informatika":
+      return "bg-orange-400";
+    case "Agribisnis dan Agroteknologi":
+      return "bg-green-500";
+    case "Teknologi dan Rekayasa":
+      return "bg-blue-500";
+    case "Teknologi Elektronika":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
+  }
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const facilityData = await fetchFacility();
   const facilityById = await getFacilityById(id);
-
-  // if (facilityById === 'Data tidak ditemukan' || !facilityById) {
-  //     redirect('/404');
-  // }
-
+  
   return (
     <DetailLayout detailData={facilityById}>
       <div className="flex flex-col items-center gap-[3.5rem] xl:min-h-[20rem]">
@@ -56,7 +67,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             {facilityById?.facility_name}
           </Heading>
           <div
-            className={`bg-[#007AFF] px-2 py-1 rounded-[6px] 1xl:rounded-[10px]`}
+            className={`px-2 py-1 rounded-[6px] 1xl:rounded-[10px]  ${
+              "prodi" in facilityById
+                ? getCategoryColor(facilityById.prodi.nama_prodi)
+                : "bg-[#007AFF]"
+            }`}
           >
             <Heading
               type="h5"

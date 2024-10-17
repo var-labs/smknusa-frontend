@@ -16,7 +16,7 @@ const MajorFilter = ({
         Kami memiliiki beberapa jurusan yang dapat menunjang kebutuhan siswa.
       </Heading>
       <Menu as="div" className="relative inline-block text-left">
-        <div className="w-[20rem]">
+        <div className="w-[20rem]  mt-5 lg:mt-0 mr-0 lg:mr-3 xl:mr-0">
           <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-medium  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             Filter
             <Image

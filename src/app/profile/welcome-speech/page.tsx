@@ -18,7 +18,7 @@ const ProfileHistory = () => {
       <Image
         src={"/assets/profile/welcome-speech/profile-welcome-speech.png"}
         alt="welcome-speech"
-        className="w-full rounded-[10px]"
+        className="w-full rounded-[10px] mt-10"
         width={800}
         height={800}
       />
