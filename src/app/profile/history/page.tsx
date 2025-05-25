@@ -1,14 +1,14 @@
+"use client"
+
 import Image from "next/image";
 import React from "react";
 import { Paragraph } from "@/components/ui/typography";
 import ProfileLayout from "@/layouts/profile-layout";
-
-export const metadata = {
-  title: "School History",
-  description: "SMKN 1 Purwosari History",
-};
+import { useSchool } from "@/services/api/useQueries/useSchool";
 
 const ProfileHistory = () => {
+  const { schoolHistory } = useSchool();
+
   return (
     <ProfileLayout
       title="Sejarah Berdirinya Sekolah"
@@ -17,7 +17,27 @@ const ProfileHistory = () => {
       className="my-10"
       classNameWrapper="pt-[70px]"
     >
-      <Image
+      <Image 
+        src={schoolHistory?.[0]?.profile_image || ""}
+        alt={schoolHistory?.[0]?.profile_name || ""}
+        draggable={false}
+        className="w-full rounded-[10px]"
+        width={800}
+        height={800}
+      />
+      <Paragraph className="flex flex-col items-start gap-10 text-blue-base">
+        <span>
+          {schoolHistory && schoolHistory.length > 0 && (
+            <div
+              className="max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: schoolHistory[0].profile_data,
+              }}
+            />
+          )}
+        </span>
+      </Paragraph>
+      {/* <Image
         src={"/assets/profile/history/profile-history.png"}
         alt=""
         draggable={false}
@@ -63,7 +83,7 @@ const ProfileHistory = () => {
           Purwosari, seperti komputer dan alat-alat lainnya untuk mendukung
           pembelajaran siswa mereka.
         </span>
-      </Paragraph>
+      </Paragraph> */}
     </ProfileLayout>
   );
 };

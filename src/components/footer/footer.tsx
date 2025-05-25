@@ -17,10 +17,6 @@ export default function Footer() {
   const locationInfo = informations?.find(info => info.alias === 'location');
   const emailInfo = informations?.find(info => info.alias === 'email');
   const phoneInfo = informations?.find(info => info.alias === 'phone');
-  // const socialMediaAliases = ['facebook', 'instagram', 'twitter', 'telegram', 'tiktok'];
-  // const socialMediaLinks = informations?.filter(info =>
-  //   socialMediaAliases.includes(info.alias)
-  // );
   const socialMediaLinks = informations?.filter(info => info.alias === 'sosmed');
 
 
@@ -172,11 +168,22 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center space-x-4">
-            {socialMediaLinks?.map((info) => (
-              <Link key={info.id} href={info.link} target="_blank" rel="noopener noreferrer">
-                <Image src={info.logo} alt={info.alias} width={22} height={22} />
-              </Link>
-            ))}
+            {informations === undefined ? (
+              Array.from({ length: 4 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="w-[22px] h-[22px] rounded-full bg-gray-300 animate-pulse"
+                />
+              ))
+            ) : socialMediaLinks && socialMediaLinks?.length > 0 ? (
+              socialMediaLinks?.map((info) => (
+                <Link key={info.id} href={info.link} target="_blank" rel="noopener noreferrer">
+                  <Image src={info.logo} alt={info.name} width={22} height={22} />
+                </Link>
+              ))
+            ) : (
+              <p></p>
+            )}
           </div>
         </div>
       </div>

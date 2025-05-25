@@ -1,21 +1,22 @@
-
+"use client";
 
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { cn } from "@/utils/cn";
-
-export const metadata = {
-  title: "School E-Learning",
-  description: "SMKN 1 Purwosari E-Learning",
-};
+import { useElearn } from "@/services/api/useQueries/useElearn";
+import { backendUrl } from "@/utils/backendUrl";
 
 const Page = () => {
+  const { elearn } = useElearn();
+
+  const imageUrl = elearn?.[0]?.thumbnail ? `${backendUrl}${elearn?.[0].thumbnail}` : "";
 
   return (
     <div className="flex xl:min-h-screen flex-col items-center gap-3 ">
-      <div className="relative bg-[url('/assets/academic/e-learn/e-learn.png')] mt-[65px] xl:mt-24  h-[16rem] w-full  p-2 xl:p-2.5 overflow-hidden sm:h-[17rem] md:h-[20rem] xl:h-[28rem] 1xl:h-[32.375rem] bg-cover bg-no-repeat">
+      <div className="relative mt-[65px] xl:mt-24  h-[16rem] w-full  p-2 xl:p-2.5 overflow-hidden sm:h-[17rem] md:h-[20rem] xl:h-[28rem] 1xl:h-[32.375rem] bg-cover bg-no-repeat"
+        style={{backgroundImage: `url(${imageUrl})`}}>
         <div className="relative 1xl:pb-6 h-full w-full flex justify-center overflow-hidden">
           <div className="inset-0 flex flex-col items-center justify-center text-white px-8  max-w-full md:max-w-md-content lg:max-w-lg-content xl:max-w-full  z-20  w-full">
             <div className=" flex flex-col items-center container xl:pt-16 gap-6">
@@ -23,20 +24,18 @@ const Page = () => {
                 type="h1"
                 className={cn("xl:!text-[46px] text-center lg:!text-[32px] ")}
               >
-                E-Learning SMKN 1 Purwosari
+                {elearn?.[0]?.title}
               </Heading>
               <Heading
                 type="h5"
                 className="text-center font-medium text-xs lg:text-base xl:text-[18px] md:w-[28rem] lg:w-[38rem] xl:w-[708px]"
               >
-                Di SMKN 1 Purwosari sarana yang digunakan untuk pembelajaran
-                online atau daring adalah Microsoft Teams yang ada pada
-                Microsoft 365
+               {elearn?.[0]?.desc}
               </Heading>
               <div className="flex justify-center gap-3 xl:gap-6 items-center">
                 <button className="px-6 py-2 bg-white rounded-lg flex justify-center items-center gap-4">
                   <Image
-                    src={"/assets/icon/teams.svg"}
+                    src={backendUrl + elearn?.[0]?.btn_icon || ""}
                     alt="teams"
                     draggable={false}
                     width={30}
@@ -45,16 +44,17 @@ const Page = () => {
                   />
                   <Link
                     href={
-                      "https://go.microsoft.com/fwlink/p/?LinkID=873020&clcid=0x409&culture=en-us&country=US&lm=deeplink&lmsrc=homePageWeb&cmpid=WebSignIn"
+                      elearn?.[0]?.btn_url || ""
                     }
                     className="font-medium text-sm text-blue-base"
                   >
-                    Masuk
+                    {elearn?.[0]?.btn_label}
                   </Link>
                 </button>
                 <button className="px-6 py-[10.5px] bg-white rounded-lg flex justify-center items-center gap-4">
                   <Image
-                    src={"/assets/icon/download.svg"}
+                    src={backendUrl + elearn?.[0]?.btn_icon_2 || ""}
+                    draggable={false}
                     alt="download"
                     width={30}
                     height={30}
@@ -62,13 +62,14 @@ const Page = () => {
                   />
                   <Link
                     href={
-                      "https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app"
+                      elearn?.[0]?.btn_url_2 || ""
                     }
                     className="font-medium text-sm text-blue-base"
                   >
-                    Unduh
+                    {elearn?.[0]?.btn_label_2}
                   </Link>
                 </button>
+
               </div>
             </div>
           </div>
@@ -82,26 +83,22 @@ const Page = () => {
                 type="h5"
                 className="font-semibold xl:text-xl 1xl:text-2xl text-blue-base"
               >
-                Apa itu Microsoft Teams 365 ?
+                {elearn?.[0]?.subtitle}
               </Heading>
               <Paragraph className="font-medium text-xs sm:text-sm 1xl:text-[18px] 1xl:leading-7">
-                Microsoft Teams adalah sebuah platform komunikasi dan kolaborasi
-                terpadu yang menggabungkan fitur percakapan kerja, rapat video,
-                penyimpanan berkas, dan integrasi aplikasi. Aplikasi ini
-                terintegrasi dengan langganan Office 365 dan juga dapat
-                diintegrasikan dengan produk selain buatan Microsoft.
+                {elearn?.[0]?.body_desc}
               </Paragraph>
               <div className="flex flex-wrap items-center gap-[22px] my-4">
-                <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
+                {/* <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
                   <Image
-                    src={"/assets/icon/lock.svg"}
+                    src={backendUrl + elearn?.[0]?.badge?.[0]?.icon || ""}
                     alt="lock"
                     width={30}
                     height={30}
                     className="w-[18px] "
                   />
                   <span className="font-medium text-xs 1xl:text-sm text-blue-base">
-                    Aman
+                    {elearn?.[0]?.badge?.[0]?.label || ""}
                   </span>
                 </button>
                 <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
@@ -127,10 +124,28 @@ const Page = () => {
                   <span className="font-medium text-xs 1xl:text-sm text-blue-base">
                     Fitur Banyak
                   </span>
-                </button>
+                </button> */}
+                {elearn?.[0]?.badge?.map((badge) => (
+                  console.log(badge),
+                  <button
+                    key={badge.id}
+                    className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2"
+                  >
+                    <Image
+                      src={backendUrl + badge.icon }
+                      alt={badge.label}
+                      width={30}
+                      height={30}
+                      className="w-[18px]"
+                    />
+                    <span className="font-medium text-xs 1xl:text-sm text-blue-base">
+                      {badge.label || ""}
+                    </span>
+                  </button>
+                ))}
               </div>
               <Link
-                href={"https://www.microsoft.com/en-us/microsoft-365"}
+                href={elearn?.[0]?.body_url || ""}
                 className="border-none w-full py-3 1xl:py-4 px-6 border-2 border-primary flex justify-between items-center  text-blue-base bg-yellow-light rounded-md"
               >
                 <span className="text-xs sm:text-base">Pelajari lebih</span>
@@ -144,8 +159,9 @@ const Page = () => {
               </Link>
             </div>
             <Image
-              src={"/assets/academic/e-learn/teams-app.png"}
-              alt="teams"
+              src={backendUrl + elearn?.[0]?.body_thumbnail || ""}
+              alt={elearn?.[0]?.title || "E-Learn Thumbnail"}
+              draggable={false}
               width={580}
               height={580}
               className="w-[456px] 1xl:w-[565px]"

@@ -16,9 +16,10 @@ const TeachingDeviceCard = ({
     deviceFormFilter
   );
   const [showAllDevice, setShowAllDevice] = useState(false);
+  console.log("teachings", teachings);
 
   return (
-    <div className="flex flex-col justify-center items-center bg-white rounded-lg w-full">
+    <div className="flex flex-col justify-center items-center bg-white rounded-lg w-full 2xl:px-20">
       <div className="flex justify-center items-center flex-col w-full ">
         {!isTeachingsLoading ? (
           <>

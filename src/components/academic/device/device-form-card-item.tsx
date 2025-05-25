@@ -81,7 +81,7 @@ const DeviceFormCardItem = ({ deviceFormData }: DeviceFormCardItemProps) => {
                   className="mr-3"
                 />
                 <span className="text-[12px] text-[#081B34] font-[400]">
-                  {deviceFormData?.size} MB
+                  {deviceFormData?.size}
                 </span>
               </div>
             ) : null}

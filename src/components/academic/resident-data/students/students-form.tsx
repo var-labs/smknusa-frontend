@@ -113,9 +113,9 @@ const StudentsForm = ({
               placeholder="Masukkan NISN atau Nama"
               className="xl:w-[107%] h-10 border border-gray-300 rounded-lg p-2"
             />
-            <Menu as="div" className="relative inline-block text-left w-full ">
+            <Menu as="div" className="relative inline-block text-left w-full">
               <div className="w-full">
-                <MenuButton className="inline-flex text-gray-light w-full justify-between items-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm   text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <MenuButton className="inline-flex text-gray-light w-full justify-between items-center gap-x-1.5 rounded-md bg-white px-4 py-[10px] text-sm   text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                   {studentsFilter.search_kelas
                     ? studentsFilter.search_kelas
                     : "Pilih Kelas"}

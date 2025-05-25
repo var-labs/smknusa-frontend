@@ -3,6 +3,7 @@ import {
   getCourseWork,
   getPrincipalSpeech,
   getSchoolCommittee,
+  getSchoolHistory,
   getSchoolStructure,
   getVisiMission,
 } from "../methods/fetch-school";
@@ -63,6 +64,15 @@ export const useSchool = () => {
       },
     });
 
+  const { data: schoolHistory, isLoading: isSchoolHistoryLoading } =
+    useQuery<SchoolProfile[] | null>({
+      queryKey: ["SchoolHistory"],
+      queryFn: async () => {
+        const data = await getSchoolHistory();
+        return data ?? [];
+      },
+    });
+
   if (schoolCommittee == undefined) {
     console.log("get data returned undefined");
   } else {
@@ -80,5 +90,7 @@ export const useSchool = () => {
     isVisiMissionLoading,
     principalSpeech,
     isPrincipalSpeechLoading,
+    schoolHistory,
+    isSchoolHistoryLoading,
   };
 };

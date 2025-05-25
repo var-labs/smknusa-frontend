@@ -62,12 +62,12 @@ const StudentsTable = ({
   }
 
   return (
-    <div className="relative flex flex-col 1md:rounded-lg border w-full">
-      <div className="flex items-center justify-between mx-4 1md:mx-12 gap-4">
-        <div className="flex w-full flex-col sm:flex-row items-start sm:items-center justify-between 1md:justify-start gap-4">
+    <div className="relative flex flex-col 1xl:rounded-lg border w-full">
+      <div className="flex items-center justify-between mx-4 1xl:mx-12 gap-4">
+        <div className="flex w-full flex-col sm:flex-row items-start sm:items-center justify-between 1xl:justify-start gap-4">
           <Heading
             type="h5"
-            className="!text-sm font-bold text-blue-base 1md:w-fit my-6"
+            className="!text-sm font-bold text-blue-base 1xl:w-fit my-6"
           >
             Peserta Didik
           </Heading>

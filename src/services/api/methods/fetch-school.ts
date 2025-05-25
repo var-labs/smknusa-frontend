@@ -1,7 +1,5 @@
 import { axiosInstance } from "@/utils/axiosInstance";
 
-
-
 export async function getSchoolCommittee() {
   try {
     const response = await axiosInstance.get("api/user/profile/komite-sekolah");
@@ -61,6 +59,19 @@ export async function getPrincipalSpeech() {
     return data;
   } catch (error) {
     console.log(error, "Error fetching principal speech");
+    return null;
+  }
+}
+
+export async function getSchoolHistory() {
+  try {
+    const response = await axiosInstance.get(
+      "api/user/profile/history"
+    );
+    const data = response.data.data;
+    return data;
+  } catch (error) {
+    console.log(error, "Error fetching school history");
     return null;
   }
 }
