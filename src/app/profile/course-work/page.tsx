@@ -2,8 +2,8 @@
 
 import React from "react";
 import ProfileLayout from "@/layouts/profile-layout";
-import PDFViewer from "@/components/ui/pdf-viewer";
 import { useSchool } from "@/services/api/useQueries/useSchool";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileCourseWork = () => {
   const { courseWork } = useSchool();
@@ -14,7 +14,8 @@ const ProfileCourseWork = () => {
       subtitle="Program Kerja Sekolah SMK Negeri 1 Purwosari"
       classNameWrapper="pt-[70px]"
     >
-      <PDFViewer
+     <DynamicSchoolContentRenderer data={courseWork ?? []}/>
+      {/* <PDFViewer
         className="mt-10"
         url={
           (courseWork && 
@@ -22,7 +23,7 @@ const ProfileCourseWork = () => {
             courseWork?.[0]?.profile_data) ||
             ""
         }
-      />
+      /> */}
       {/* <div className="flex flex-col items-start xl:w-[60%] gap-4">
         <Image
           src={"/assets/profile/course-work/course-work.png"}

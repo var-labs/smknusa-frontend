@@ -5,6 +5,7 @@ import React from "react";
 import ProfileLayout from "@/layouts/profile-layout";
 import { useSchool } from "@/services/api/useQueries/useSchool";
 import { Paragraph } from "@/components/ui/typography";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileVisionMision = () => {
   const { visiMission } = useSchool();
@@ -17,12 +18,7 @@ const ProfileVisionMision = () => {
       classNameWrapper="pt-[70px]"
     >
       <Paragraph>
-        {visiMission && visiMission.length > 0 && (
-          <div
-            className="max-w-none"
-            dangerouslySetInnerHTML={{ __html: visiMission[0].profile_data }}
-          />
-        )}
+        <DynamicSchoolContentRenderer data={visiMission ?? []}/>
       </Paragraph>
       {/* <span className="flex flex-col items-start gap-4 mt-10">
         <Heading type="h3">Visi SMK Negeri 1 Purwosari adalah</Heading>

@@ -2,8 +2,8 @@
 
 import React from "react";
 import ProfileLayout from "@/layouts/profile-layout";
-import PDFViewer from "@/components/ui/pdf-viewer";
 import { useSchool } from "@/services/api/useQueries/useSchool";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileSchoolCommittee = () => {
   const { schoolCommittee } = useSchool();
@@ -14,7 +14,7 @@ const ProfileSchoolCommittee = () => {
       subtitle="Memberitahu informasi mengenai komite sekolah"
       classNameWrapper="pt-[70px]"
     >
-      <PDFViewer
+      {/* <PDFViewer
         className="mt-10"
         url={
           (schoolCommittee &&
@@ -22,7 +22,8 @@ const ProfileSchoolCommittee = () => {
             schoolCommittee?.[0]?.profile_data) ||
           ""
         }
-      />
+      /> */}
+      <DynamicSchoolContentRenderer data={schoolCommittee ?? []}/>
     </ProfileLayout>
   );
 };

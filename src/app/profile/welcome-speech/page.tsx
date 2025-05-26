@@ -5,6 +5,7 @@ import Image from "next/image";
 import ProfileLayout from "@/layouts/profile-layout";
 import { Paragraph } from "@/components/ui/typography";
 import { useSchool } from "@/services/api/useQueries/useSchool";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileHistory = () => {
   const { principalSpeech } = useSchool();
@@ -28,7 +29,8 @@ const ProfileHistory = () => {
           "flex flex-col items-start  gap-10 text-blue-base"
         }
       >
-        <span>
+        <DynamicSchoolContentRenderer data={principalSpeech ?? []} />
+        {/* <span>
           Assalamualaikum warahmatullahi wabarakatuh. Dengan mengucapkan segala
           puji kepada Tuhan Yang Maha Esa, disertai rasa syukur atas rahmat dan
           karunia-Nya. Perkembangan era revolusi industri 4.0 (era digital) dan
@@ -68,7 +70,7 @@ const ProfileHistory = () => {
           Harapan kita semua adalah sekolah semakin berkualitas dan sukses dalam
           mencerdaskan kehidupan anak bangsa Indonesia menuju Generasi Emas.
           Amin. Wassalamu’alaikum warahmatullahi wabarakatuh.
-        </span>
+        </span> */}
       </Paragraph>
     </ProfileLayout>
   );

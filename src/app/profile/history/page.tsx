@@ -5,6 +5,7 @@ import React from "react";
 import { Paragraph } from "@/components/ui/typography";
 import ProfileLayout from "@/layouts/profile-layout";
 import { useSchool } from "@/services/api/useQueries/useSchool";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileHistory = () => {
   const { schoolHistory } = useSchool();
@@ -26,16 +27,7 @@ const ProfileHistory = () => {
         height={800}
       />
       <Paragraph className="flex flex-col items-start gap-10 text-blue-base">
-        <span>
-          {schoolHistory && schoolHistory.length > 0 && (
-            <div
-              className="max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: schoolHistory[0].profile_data,
-              }}
-            />
-          )}
-        </span>
+        <DynamicSchoolContentRenderer data={schoolHistory ?? []}/>
       </Paragraph>
       {/* <Image
         src={"/assets/profile/history/profile-history.png"}
