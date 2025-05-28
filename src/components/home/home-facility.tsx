@@ -18,7 +18,8 @@ const HomeFacility = () => {
   const [currentSlide, setCurrentSlide] = useState("TI");
   const { facilities } = useFacilities();
   const facilityCardData = facilities?.filter(
-    (facility: Facility) => facility.prodi.prodi_short === currentSlide
+    (facility: Facility) => facility.prodi.prodi_short === currentSlide || 
+      (currentSlide === "TI" && facility.prodi.prodi_short === "Elektro")
   );
   const [isChangingSlide, setIsChangingSlide] = useState(false);
 

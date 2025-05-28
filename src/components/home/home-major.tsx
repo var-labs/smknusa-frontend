@@ -29,14 +29,10 @@ const HomeMajor = () => {
   const navHighlight = useAnimation();
   const { majors } = useMajors();
   const majorData = majors?.filter(
-    (major: Major) => major.prodi.prodi_short === currentSlide
+    (major: Major) => major.prodi.prodi_short === currentSlide || (currentSlide === "TI" && major.prodi.prodi_short === "Elektro")
   );
 const isMobile = useMediaQuery("only screen and (max-width : 1023.98px)");
   const controls = useAnimation();
-
-
-  
-
 
   const handleSlideChange = useCallback(
     (newSlide: string) => {
