@@ -24,6 +24,7 @@ const config: Config = {
         "gray-base": "#F2F2F2",
         "gray-medium": "#E2E8F0",
         "yellow-light": "#FFD980",
+        "blue-base": "#081B34",
         yellow: "#F5C451",
         primary: "#081B34",
       },
