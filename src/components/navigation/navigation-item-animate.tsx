@@ -5,6 +5,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { useActivePage } from "@/contexts/ActivePageContext";
 import { cn } from "@/utils/cn";
 import { NavigationLinkData } from "./navigation-item";
+import { backendUrl } from "@/utils/backendUrl";
 
 type NavigationItemAnimateProps = {
   itemData: NavigationLinkData;
@@ -62,6 +63,8 @@ const NavigationItemAnimate = ({
     },
   };
 
+  console.log("itemData", backendUrl + itemData.linkDropdownData.icon);
+
   return (
     <motion.div
       initial={"initial"}
@@ -74,7 +77,7 @@ const NavigationItemAnimate = ({
       )}
     >
       <Image
-        src={itemData.linkDropdownData.icon}
+        src={backendUrl + itemData.linkDropdownData.icon}
         alt={itemData.linkDropdownData.icon}
         width={40}
         height={40}

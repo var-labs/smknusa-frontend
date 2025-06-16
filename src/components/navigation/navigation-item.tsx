@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 
 import Link from "next/link";
@@ -10,6 +10,7 @@ import NavigationItemAnimate from "./navigation-item-animate";
 import { defaultTransition } from "../animation/transition";
 import { NavigationDropdownMenuItem } from "./navigation-dropdown-menu-item";
 import NavigationDropdown from "./navigation-dropdown-icon";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 export type NavigationLinkData = {
   linkDropdownData: {
@@ -27,152 +28,83 @@ interface NavigationItemProps {
   route?: string;
 }
 
-const navbarDropdownData: { [key: string]: NavigationLinkData[] } = {
-  Profile: [
-    {
-      linkDropdownData: {
-        text: "Sambutan Kepala Sekolah",
-        description: "Berisi sambutan resmi dari kepala sekolah",
-        icon: "/assets/nav-dropdown-icon/profile/sambutan-kepsek.svg",
-        linkRef: "/profile/welcome-speech",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Visi dan Misi",
-        description: "Berisi Informasi Visi dan Misi SMK",
-        icon: "/assets/nav-dropdown-icon/profile/visi-misi.svg",
-        linkRef: "/profile/vision-mision",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Struktur Organisasi Sekolah",
-        description: "Berisi Tatanan Struktur Organisasi SMK",
-        icon: "/assets/nav-dropdown-icon/profile/struktur.svg",
-        linkRef: "/profile/structure",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Program Kerja Sekolah",
-        description: "Berisi Tatanan Program Kerja SMK",
-        icon: "/assets/nav-dropdown-icon/profile/proker.svg",
-        linkRef: "/profile/course-work",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Komite Sekolah",
-        description: "Berisi Tatanan Komite SMK",
-        icon: "/assets/nav-dropdown-icon/profile/komite.svg",
-        linkRef: "/profile/school-committe",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Fasilitas Sekolah",
-        description: "Berisi Detail Kelengkapan Fasilitas SMK",
-        icon: "/assets/nav-dropdown-icon/profile/fasilitas.svg",
-        linkRef: "/profile/school-facility",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Sejarah Sekolah",
-        description: "Berisi Informasi Mengenai Sejarah Berdirinya SMK",
-        icon: "/assets/nav-dropdown-icon/profile/sejarah.svg",
-        linkRef: "/profile/history",
-      },
-    },
-  ],
-  Akademik: [
-    {
-      linkDropdownData: {
-        text: "Data Warga Sekolah",
-        description: "Berisi Data Warga SMK Negeri 1 Purwosari",
-        icon: "/assets/nav-dropdown-icon/akademik/data-warga.svg",
-        linkRef: "/academic/resident-data",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Ekstrakulikuler",
-        description: "Berisi Data Ekstrakulikuler SMK Negeri 1 Purwosari",
-        icon: "/assets/nav-dropdown-icon/akademik/ekstrakulikuler.svg",
-        linkRef: "/academic/extracurricular",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "E-Learning",
-        description: "Berisi Informasi E-Learning yang di Gunakan SMK",
-        icon: "/assets/nav-dropdown-icon/akademik/e-learning.svg",
-        linkRef: "/academic/e-learn",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "PPDB",
-        description: "Berisi Link untuk Menuju ke Website PPDB",
-        icon: "/assets/nav-dropdown-icon/akademik/ppdb.svg",
-        linkRef: "https://ppdbjatim.net/",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Jurusan",
-        description: "Berisi Data Jurusan SMK Negeri 1 Purwosari",
-        icon: "/assets/nav-dropdown-icon/akademik/jurusan.svg",
-        linkRef: "/academic/major",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Form Perangkat Ajar",
-        description: "Berisi Data Perangkat Ajar SMK Negeri 1 Purwosari",
-        icon: "/assets/nav-dropdown-icon/akademik/form-pa.svg",
-        linkRef: "/academic/device-form",
-      },
-    },
-  ],
-  // BKK: [
-  //   {
-  //     linkDropdownData: {
-  //       text: "Kemitraan",
-  //       description: "Berisi Data Kemitraan SMK Negeri 1 Purwosari",
-  //       icon: "/assets/nav-dropdown-icon/bkk/kemitraan.svg",
-  //       linkRef: "/bkk/partnership",
-  //     },
-  //   },
-  //   {
-  //     linkDropdownData: {
-  //       text: "Lowongan Pekerjaan",
-  //       description: "Berisi Data Loker SMK Negeri 1 Purwosari",
-  //       icon: "/assets/nav-dropdown-icon/bkk/lowongan.svg",
-  //       linkRef: "/bkk/job",
-  //     },
-  //   },
-  // ],
-  Info: [
-    {
-      linkDropdownData: {
-        text: "Berita",
-        description: "Berisi Informasi Mengenai Berita yang Ada di SMK",
-        icon: "/assets/nav-dropdown-icon/info/info.svg",
-        linkRef: "/info/news",
-      },
-    },
-    {
-      linkDropdownData: {
-        text: "Artikel",
-        description: "Berisi Informasi Mengenai Artikel Yang Ada di SMK",
-        icon: "/assets/nav-dropdown-icon/info/info.svg",
-        linkRef: "/info/article",
-      },
-    },
-  ],
+const slugify = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
 };
+
+const getDescription = (title: string): string => {
+  const descriptions: { [key: string]: string } = {
+    "Sambutan Kepala Sekolah": "Berisi sambutan resmi dari kepala sekolah",
+    "Visi dan Misi": "Berisi Informasi Visi dan Misi SMK",
+    "Struktur Organisasi Sekolah": "Berisi Tatanan Struktur Organisasi SMK",
+    "Program Kerja Sekolah": "Berisi Tatanan Program Kerja SMK",
+    "Komite Sekolah": "Berisi Tatanan Komite SMK",
+    "Fasilitas Sekolah": "Berisi Detail Kelengkapan Fasilitas SMK",
+    "Sejarah Sekolah": "Berisi Informasi Mengenai Sejarah Berdirinya SMK",
+    "Data Warga Sekolah": "Berisi Data Warga SMK Negeri 1 Purwosari",
+    "Ekstrakurikuler": "Berisi Data Ekstrakulikuler SMK Negeri 1 Purwosari",
+    "E-Learning": "Berisi Informasi E-Learning yang di Gunakan SMK",
+    "PPDB": "Berisi Link untuk Menuju ke Website PPDB",
+    "Jurusan": "Berisi Data Jurusan SMK Negeri 1 Purwosari",
+    "Form Perangkat Ajar": "Berisi Data Perangkat Ajar SMK Negeri 1 Purwosari",
+    "Berita": "Berisi Informasi Mengenai Berita yang Ada di SMK",
+    "Artikel": "Berisi Informasi Mengenai Artikel Yang Ada di SMK",
+  };
+
+  return descriptions[title] || "Deskripsi belum tersedia";
+};
+
+const generateLinkRef = (parentTitle: string, route: string): string => {
+  if (route.startsWith("http")) return route;
+
+  let prefix = "";
+
+  switch (parentTitle.toLowerCase()) {
+    case "profile":
+      prefix = "/profile";
+      break;
+    case "akademik":
+      prefix = "/academic";
+      break;
+    case "info":
+      prefix = "/info";
+      break;
+    default:
+      prefix = "/";
+      break;
+  }
+
+  return `${prefix}${route.startsWith("/") ? "" : "/"}${route.replace(/^\//, "")}`;
+};
+
+const convertNavbarJsonToDropdownData = (json: any): { [key: string]: NavigationLinkData[] } => {
+  const map: { [key: string]: NavigationLinkData[] } = {};
+
+  json.forEach((item: any) => {
+    if (item.sub_navbar && Array.isArray(item.sub_navbar)) {
+      const categoryKey = item.title;
+
+      map[categoryKey] = item.sub_navbar.map((sub: any) => {
+        const iconPath = `/assets/nav-dropdown-icon/${item.title.toLowerCase()}/${slugify(sub.title)}.svg`;
+
+        return {
+          linkDropdownData: {
+            text: sub.title,
+            description: sub.description,
+            icon: iconPath,
+            linkRef: generateLinkRef(item.title, sub.route),
+          },
+        };
+      });
+    }
+  });
+
+  return map;
+};
+
 
 const NavigationItem = ({
   name,
@@ -184,12 +116,18 @@ const NavigationItem = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownControls = useAnimation();
   const basePathname = usePathname();
+  const { navbars} = useNavbar()
   const pathname = "/" + basePathname.split("/")[1];
   const isMobile = useMediaQuery("only screen and (max-width: 1023.98px)");
   const { activePage } = useActivePage();
-  const dropdownData = currentDropdown
-    ? navbarDropdownData[currentDropdown]
-    : null;
+const dropdownData = useMemo(() => {
+  return navbars ? convertNavbarJsonToDropdownData(navbars) : {};
+}, [navbars]);
+
+const currentDropdownData = useMemo(() => {
+  return currentDropdown ? dropdownData[currentDropdown] ?? [] : [];
+}, [dropdownData, currentDropdown]);
+
 
   const handleOpenDropdown = () => {
     dropdownControls.start("animate");
@@ -225,13 +163,7 @@ const NavigationItem = ({
               show || !activePage ? "text-blue-base" : "text-white"
             }`}
           >
-            {route === "/e-raport" ? (
-              <Link href="http://36.93.85.150:8154/">{name}</Link>
-            ) : route === "/w-bkk" ? (
-              <Link href="https://bkk.smkn1purwosari.sch.id/">{name}</Link>
-            ) : (
-              name
-            )}
+            <Link href={route || ""}>{name}</Link>
           </span>
           {dropdown && (
             <motion.div animate={{ rotate: showDropdown ? 180 : 0 }}>
@@ -257,7 +189,7 @@ const NavigationItem = ({
                     before:content-[''] xl:before:block before:hidden before:absolute before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[14px] before:top-[-13.6px]  before:left-2
                   scrollbar scrollbar-w-[6px] scrollbar-thumb-[#F5C451] scrollbar-track-yellow-100`)}
                 >
-                  {dropdownData?.map((data, index) => (
+                  {currentDropdownData?.map((data, index) => (
                     <React.Fragment key={index}>
                       <Link
                         href={data.linkDropdownData.linkRef}

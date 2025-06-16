@@ -7,7 +7,7 @@ export interface SubNavbarItem {
   icon: string;
   route: string;
   navbar_id: string;
-  description: string;
+  description?: string;
 }
 
 export interface NavbarItem {
