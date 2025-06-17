@@ -6,13 +6,12 @@ import Link from "next/link";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
-import { useActiveToast } from "@/contexts/ActiveToastContext";
+// import { useActiveToast } from "@/contexts/ActiveToastContext";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItem from "./navigation-item";
-import NavigationLanguage from "./navigation-language";
 import NavigationSearch from "./navigation-search";
 import NavigationSearchResult from "./navigation-search-result";
 import NavigationHamburger from "./navigation-hamburger";
-import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 const Navbar = () => {
   const [show, setShow] = useState(true);
@@ -22,8 +21,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const [searchToggle, setSearchToggle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { navbars, isNavbarsLoading } = useNavbar();
-  const { handleActiveUnavailableToast } = useActiveToast();
+  const { navbars } = useNavbar();
+  // const { handleActiveUnavailableToast } = useActiveToast();
   const [currentDropdown, setCurrentDropdown] = useState<string | null>(
     "Akademik"
   );
@@ -167,6 +166,27 @@ const Navbar = () => {
                     onClick={() => handleToggleMenu()}
                   />
                 ))} */}
+                {isMobile &&
+                  (!showMenu ? (
+                    <Image
+                      src={"/assets/icon/hamburger.svg"}
+                      alt="hamburger"
+                      width={25}
+                      height={25}
+                      className="w-6 h-6 "
+                      onClick={() => handleToggleMenu()}
+                    />
+                  ) : (
+                    <Image
+                      src={"/assets/icon/close-square-blue.svg"}
+                      alt="hamburger"
+                      width={25}
+                      height={25}
+                      className="w-6 h-6 "
+                      onClick={() => handleToggleMenu()}
+                    />
+                  ))
+                }
             </div>
           </div>
         </div>
