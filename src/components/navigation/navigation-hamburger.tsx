@@ -1,38 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import React, { useMemo } from "react";
+import React from "react";
 import Link from "next/link";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import { Heading, Paragraph } from "../ui/typography";
 import { defaultTransition } from "../animation/transition";
-import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 const slugify = (text: string): string => {
   return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
-};
-
-const getDescription = (title: string): string => {
-  const descriptions: { [key: string]: string } = {
-    "Sambutan Kepala Sekolah": "Berisi sambutan resmi dari kepala sekolah",
-    "Visi dan Misi": "Berisi Informasi Visi dan Misi SMK",
-    "Struktur Organisasi Sekolah": "Berisi Tatanan Struktur Organisasi SMK",
-    "Program Kerja Sekolah": "Berisi Tatanan Program Kerja SMK",
-    "Komite Sekolah": "Berisi Tatanan Komite SMK",
-    "Fasilitas Sekolah": "Berisi Detail Kelengkapan Fasilitas SMK",
-    "Sejarah Sekolah": "Berisi Informasi Mengenai Sejarah Berdirinya SMK",
-    "Data Warga Sekolah": "Berisi Data Warga SMK Negeri 1 Purwosari",
-    "Ekstrakurikuler": "Berisi Data Ekstrakulikuler SMK Negeri 1 Purwosari",
-    "E-Learning": "Berisi Informasi E-Learning yang di Gunakan SMK",
-    "PPDB": "Berisi Link untuk Menuju ke Website PPDB",
-    "Jurusan": "Berisi Data Jurusan SMK Negeri 1 Purwosari",
-    "Form Perangkat Ajar": "Berisi Data Perangkat Ajar SMK Negeri 1 Purwosari",
-    "Berita": "Berisi Informasi Mengenai Berita yang Ada di SMK",
-    "Artikel": "Berisi Informasi Mengenai Artikel Yang Ada di SMK",
-  };
-  return descriptions[title] || "Deskripsi belum tersedia";
 };
 
 const generateLinkRef = (parentTitle: string, route: string): string => {

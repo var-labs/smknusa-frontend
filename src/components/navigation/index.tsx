@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
-// import { useActiveToast } from "@/contexts/ActiveToastContext";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItem from "./navigation-item";
 import NavigationSearch from "./navigation-search";
@@ -136,36 +135,6 @@ const Navbar = () => {
                 searchToggle={searchToggle}
                 setSearchToggle={setSearchToggle}
               />
-              {/* <NavigationLanguage show={show} />
-              <Image
-                src={"/assets/icon/user-profile.svg"}
-                alt="user"
-                onClick={() => handleActiveUnavailableToast()}
-                height={20}
-                width={20}
-                className={`${!show && activePage ? `xl:invert-0 invert` : "invert"
-                  } transition-all  w-5 h-5 hidden xl:block cursor-pointer`}
-              />
-              {isMobile &&
-                (!showMenu ? (
-                  <Image
-                    src={"/assets/icon/hamburger.svg"}
-                    alt="hamburger"
-                    width={25}
-                    height={25}
-                    className="w-6 h-6 "
-                    onClick={() => handleToggleMenu()}
-                  />
-                ) : (
-                  <Image
-                    src={"/assets/icon/close-square-blue.svg"}
-                    alt="hamburger"
-                    width={25}
-                    height={25}
-                    className="w-6 h-6 "
-                    onClick={() => handleToggleMenu()}
-                  />
-                ))} */}
                 {isMobile &&
                   (!showMenu ? (
                     <Image
