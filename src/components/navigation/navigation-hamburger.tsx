@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -158,7 +160,6 @@ const NavigationHamburger = ({
               </motion.div>
             );
           } else if (route) {
-            // Render as link if route exists
             return (
               <div
                 key={name}
