@@ -49,7 +49,7 @@ const generateLinkRef = (parentTitle: string, route: string): string => {
       break;
   }
 
-  return `${prefix}${route.startsWith("/") ? "" : "/"}${route.replace(/^\//, "")}`;
+  return `${prefix}${route.startsWith("/") ? "/" : ""}${route.replace(/^\//, "")}`;
 };
 
 const convertNavbarJsonToDropdownData = (json: any): { [key: string]: NavigationLinkData[] } => {

@@ -63,8 +63,6 @@ const NavigationItemAnimate = ({
     },
   };
 
-  console.log("itemData", backendUrl + itemData.linkDropdownData.icon);
-
   return (
     <motion.div
       initial={"initial"}

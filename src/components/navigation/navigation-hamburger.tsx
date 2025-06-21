@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import React from "react";
 import Link from "next/link";
+import { backendUrl } from "@/utils/backendUrl";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import { Heading, Paragraph } from "../ui/typography";
 import { defaultTransition } from "../animation/transition";
@@ -35,7 +36,7 @@ const generateLinkRef = (parentTitle: string, route: string): string => {
       prefix = "/";
       break;
   }
-  return `${prefix}${route.startsWith("/") ? "" : "/"}${route.replace(/^\//, "")}`;
+  return `${prefix}${route.startsWith("/") ? "/" : ""}${route.replace(/^\//, "")}`;
 };
 
 const NavigationHamburger = ({
@@ -80,7 +81,7 @@ const NavigationHamburger = ({
                       ? name === "Profile"
                         ? "21rem"
                         : name === "Info"
-                          ? "9.5rem"
+                          ? "10.2rem"
                           : "18rem"
                       : "4rem",
                 }}
@@ -119,9 +120,6 @@ const NavigationHamburger = ({
                   className="flex flex-col gap-4 absolute top-16"
                 >
                   {navbarItem.sub_navbar.map((sub: any, index: number) => {
-                    const iconPath = `/assets/nav-dropdown-icon/${name.toLowerCase()}/${slugify(
-                      sub.title
-                    )}.svg`;
                     return (
                       <Link
                         href={generateLinkRef(name, sub.route)}
@@ -130,7 +128,7 @@ const NavigationHamburger = ({
                         className="flex items-center gap-2"
                       >
                         <Image
-                          src={iconPath}
+                          src={backendUrl + sub.icon}
                           alt={sub.title}
                           width={24}
                           height={24}
