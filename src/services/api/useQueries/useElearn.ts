@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getElearn } from "../methods/fetch-elearn";
+import { getElearn, getElearnDetails } from "../methods/fetch-elearn";
 
 export interface Elearn {
   id: number;
@@ -24,7 +24,7 @@ export interface Elearn {
 }[];
 }
 
-export const useElearn = () => {
+export const useElearn = (id?: string) => {
   const { data: elearn, isLoading: isElearnLoading } = useQuery<
     Elearn[] | null
   >({
@@ -34,10 +34,12 @@ export const useElearn = () => {
       return data ?? [];
     },
   });
-  if (elearn == undefined) {
-    console.log("get data returned undefined");
-  } else {
-  }
+  
+  const { data: elearnDetails, isLoading: isElearnDetailsLoading } =
+    useQuery<Elearn | null>({
+      queryKey: ["ElearnDetails"],
+      queryFn: () => getElearnDetails(id),
+    });
 
-  return { elearn, isElearnLoading };
+  return { elearn, isElearnLoading, elearnDetails, isElearnDetailsLoading};
 };

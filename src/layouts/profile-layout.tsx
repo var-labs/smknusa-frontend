@@ -37,7 +37,7 @@ const ProfileLayout = ({
           </div>
           <div
             className={cn(
-              `flex flex-col items-center gap-10 xl:gap-20 w-full`,
+              `flex flex-col items-center gap-5 xl:gap-10 w-full`,
               className
             )}
           >
