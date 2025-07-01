@@ -6,12 +6,18 @@ import { Heading, Paragraph } from "@/components/ui/typography";
 import { cn } from "@/utils/cn";
 import { useElearn } from "@/services/api/useQueries/useElearn";
 import { backendUrl } from "@/utils/backendUrl";
+import { slugify } from "@/utils/slugify";
 
-export default function Page({ params }: { params: { id: string } }) {
-const { id } = params;
-  const { elearn } = useElearn(id);
+export default function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  const { elearn, isElearnLoading } = useElearn();
 
-  const imageUrl = elearn?.[0]?.thumbnail ? `${backendUrl}${elearn?.[0].thumbnail}` : "";
+  const elearnData = elearn?.find((item) => slugify(item.title) === slug);
+
+  if (isElearnLoading) return <div className="mt-[65px] xl:mt-24">Loading...</div>;
+  if (!elearnData) return <div>Data tidak ditemukan</div>;
+
+  const imageUrl = elearnData.thumbnail ? `${backendUrl}${elearnData.thumbnail}` : "";
 
   return (
     <div className="flex xl:min-h-screen flex-col items-center gap-3 ">
@@ -24,13 +30,13 @@ const { id } = params;
                 type="h1"
                 className={cn("xl:!text-[46px] text-center lg:!text-[32px] ")}
               >
-                {elearn?.[0]?.title}
+                {elearnData?.title}
               </Heading>
               <Heading
                 type="h5"
                 className="text-center font-medium text-xs lg:text-base xl:text-[18px] md:w-[28rem] lg:w-[38rem] xl:w-[708px]"
               >
-               {elearn?.[0]?.desc}
+               {elearnData?.desc}
               </Heading>
               <div className="flex justify-center gap-3 xl:gap-6 items-center">
                   {[1, 2].map((n) => {
@@ -38,9 +44,9 @@ const { id } = params;
                     const urlKey: BtnKey = n === 1 ? "btn_url" : "btn_url_2";
                     const iconKey: BtnKey = n === 1 ? "btn_icon" : "btn_icon_2";
                     const labelKey: BtnKey = n === 1 ? "btn_label" : "btn_label_2";
-                    const url = elearn?.[0]?.[urlKey];
-                    const icon = elearn?.[0]?.[iconKey];
-                    const label = elearn?.[0]?.[labelKey];
+                    const url = elearnData?.[urlKey];
+                    const icon = elearnData?.[iconKey];
+                    const label = elearnData?.[labelKey];
 
                     return (
                       <a
@@ -74,13 +80,13 @@ const { id } = params;
                 type="h5"
                 className="font-semibold xl:text-xl 1xl:text-2xl text-blue-base"
               >
-                {elearn?.[0]?.subtitle}
+                {elearnData?.subtitle}
               </Heading>
               <Paragraph className="font-medium text-xs sm:text-sm 1xl:text-[18px] 1xl:leading-7">
-                {elearn?.[0]?.body_desc}
+                {elearnData?.body_desc}
               </Paragraph>
               <div className="flex flex-wrap items-center gap-[22px] my-4">
-                {elearn?.[0]?.badge?.map((badge) => (
+                {elearnData?.badge?.map((badge) => (
                   console.log(badge),
                   <button
                     key={badge.id}
@@ -100,7 +106,7 @@ const { id } = params;
                 ))}
               </div>
               <a
-                href={elearn?.[0]?.body_url || ""}
+                href={elearnData?.body_url || ""}
                 className="border-none w-full py-3 1xl:py-4 px-6 border-2 border-primary flex justify-between items-center  text-blue-base bg-yellow-light rounded-md"
               >
                 <span className="text-xs sm:text-base">Pelajari lebih</span>
@@ -114,8 +120,8 @@ const { id } = params;
               </a>
             </div>
             <Image
-              src={backendUrl + elearn?.[0]?.body_thumbnail || ""}
-              alt={elearn?.[0]?.title || "E-Learn Thumbnail"}
+              src={backendUrl + elearnData?.body_thumbnail || ""}
+              alt={elearnData?.title || "E-Learn Thumbnail"}
               draggable={false}
               width={580}
               height={580}

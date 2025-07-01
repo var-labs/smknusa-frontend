@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getElearn, getElearnDetails } from "../methods/fetch-elearn";
+import { getElearn } from "../methods/fetch-elearn";
 
 export interface Elearn {
   id: number;
@@ -24,7 +24,7 @@ export interface Elearn {
 }[];
 }
 
-export const useElearn = (id?: string) => {
+export const useElearn = () => {
   const { data: elearn, isLoading: isElearnLoading } = useQuery<
     Elearn[] | null
   >({
@@ -34,12 +34,6 @@ export const useElearn = (id?: string) => {
       return data ?? [];
     },
   });
-  
-  const { data: elearnDetails, isLoading: isElearnDetailsLoading } =
-    useQuery<Elearn | null>({
-      queryKey: ["ElearnDetails"],
-      queryFn: () => getElearnDetails(id),
-    });
 
-  return { elearn, isElearnLoading, elearnDetails, isElearnDetailsLoading};
+  return { elearn, isElearnLoading};
 };
