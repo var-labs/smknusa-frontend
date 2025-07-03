@@ -81,8 +81,8 @@ const NavigationHamburger = ({
                       ? name === "Profile"
                         ? "21rem"
                         : name === "Info"
-                          ? "10.2rem"
-                          : "18rem"
+                          ? "11.9rem"
+                          : "30.5rem"
                       : "4rem",
                 }}
                 transition={defaultTransition}
@@ -120,10 +120,44 @@ const NavigationHamburger = ({
                   className="flex flex-col gap-4 absolute top-16"
                 >
                   {navbarItem.sub_navbar.map((sub: any, index: number) => {
+                    // Jika ada children, render children
+                    if (Array.isArray(sub.children) && sub.children.length > 0) {
+                      return sub.children.map((child: any) => (
+                        <Link
+                          key={`child-${child.id}`}
+                          href={`/academic/e-learn/${child.route}`}
+                          onClick={() => setShowMenu(false)}
+                          className="flex items-center gap-2"
+                        >
+                          <Image
+                            src={backendUrl + child.icon}
+                            alt={child.title}
+                            width={24}
+                            height={24}
+                            className="w-5 h-5"
+                          />
+                          <div className="flex flex-col">
+                            <Paragraph
+                              className={`font-medium text-base ${pathname === `/academic/e-learn/${child.route}`
+                                ? "text-primary"
+                                : "text-gray-light"
+                              }`}
+                            >
+                              {child.title}
+                            </Paragraph>
+                            <span className="text-xs text-gray-400">
+                              {child.description ?? ""}
+                            </span>
+                          </div>
+                        </Link>
+                      ));
+                    }
+
+                    // Jika tidak ada children, render item seperti biasa
                     return (
                       <Link
                         href={generateLinkRef(name, sub.route)}
-                        key={index}
+                        key={`sub-${sub.id}`}
                         onClick={() => setShowMenu(false)}
                         className="flex items-center gap-2"
                       >
@@ -137,19 +171,20 @@ const NavigationHamburger = ({
                         <div className="flex flex-col">
                           <Paragraph
                             className={`font-medium text-base ${pathname === generateLinkRef(name, sub.route)
-                                ? "text-primary"
-                                : "text-gray-light"
-                              }`}
+                              ? "text-primary"
+                              : "text-gray-light"
+                            }`}
                           >
                             {sub.title}
                           </Paragraph>
                           <span className="text-xs text-gray-400">
-                            {sub.description ?? sub.description}
+                            {sub.description ?? ""}
                           </span>
                         </div>
                       </Link>
                     );
                   })}
+
                 </motion.div>
                 <hr
                   className={`border  ${openDropdown === name ? "border-[#F5C451]" : "border-[#E2E8F0]"
