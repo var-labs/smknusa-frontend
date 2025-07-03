@@ -59,16 +59,32 @@ const convertNavbarJsonToDropdownData = (json: any): { [key: string]: Navigation
     if (item.sub_navbar && Array.isArray(item.sub_navbar)) {
       const categoryKey = item.title;
 
-      map[categoryKey] = item.sub_navbar.map((sub: any) => {
-        return {
-          linkDropdownData: {
-            text: sub.title,
-            description: sub.description,
-            icon: sub.icon,
-            linkRef: generateLinkRef(item.title, sub.route),
-          },
-        };
-      });
+      const dropdownItem: NavigationLinkData[] = [];
+
+      item.sub_navbar.forEach((sub: any) => {
+        if (Array.isArray(sub.children) && sub.children.length > 0) {
+          sub.children.forEach((child: any) => {
+            dropdownItem.push({
+              linkDropdownData: {
+                text: sub.title + " " +child.title,
+                description: child.description || "",
+                icon: child.icon,
+                linkRef: generateLinkRef(item.title, `/e-learn/${child.route}`),
+              }
+            })
+          })
+        } else {
+          dropdownItem.push({
+            linkDropdownData: {
+              text: sub.title,
+              description: sub.description || "",
+              icon: sub.icon,
+              linkRef: generateLinkRef(item.title, sub.route),
+            },
+          });
+        }
+      }); 
+      map[categoryKey] = dropdownItem;
     }
   });
 
