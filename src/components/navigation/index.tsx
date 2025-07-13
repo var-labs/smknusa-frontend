@@ -108,7 +108,15 @@ const Navbar = () => {
                 className={`xl:flex hidden  justify-center items-center gap-8 ${!show && activePage ? "text-white" : " text-gray-light"
                   }`}
               >
-                {navbars?.map((navbarItem) => {
+                {!navbars || navbars.length === 0 ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-24 h-6 rounded bg-gray-300 animate-pulse"
+                    />
+                  ))
+                ) :
+                (navbars?.map((navbarItem) => {
                   const hasDropdown = !!navbarItem.sub_navbar?.length;
                   const name = typeof navbarItem.title === "string" ? navbarItem.title : "";
                   const route = typeof navbarItem.route === "string"
@@ -126,7 +134,8 @@ const Navbar = () => {
                       route={route}
                     />
                   );
-                })}
+                }))
+                }
               </div>
             </div>
             <div className="flex items-center justify-end xl:space-x-4 gap-4 xl:gap-0 w-[195px] pr-2">

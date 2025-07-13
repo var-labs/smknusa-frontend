@@ -54,6 +54,19 @@ const NavigationHamburger = ({
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
+  // Helper function to calculate the actual number of rendered items
+  const calculateItemCount = (subNavbar: any[]) => {
+    let totalItems = 0;
+    subNavbar.forEach((sub: any) => {
+      if (Array.isArray(sub.children) && sub.children.length > 0) {
+        totalItems += sub.children.length;
+      } else {
+        totalItems += 1;
+      }
+    });
+    return totalItems;
+  };
+
   return (
     <motion.div
       initial={{ y: -1400 }}
@@ -78,11 +91,7 @@ const NavigationHamburger = ({
                 animate={{
                   height:
                     openDropdown === name
-                      ? name === "Profile"
-                        ? "21rem"
-                        : name === "Info"
-                          ? "11.9rem"
-                          : "30.5rem"
+                      ? `${64 + (calculateItemCount(navbarItem.sub_navbar) * 40) + ((calculateItemCount(navbarItem.sub_navbar) - 1) * 16) + 32}px`
                       : "4rem",
                 }}
                 transition={defaultTransition}
