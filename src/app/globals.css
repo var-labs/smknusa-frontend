@@ -33,7 +33,6 @@
 
 .swiper-wrapper {
   display: flex;
-  width: 100%;
 }
 
 /* SCOPED SWIPER STYLE */
@@ -66,7 +65,3 @@
 .swiper-pagination-bullet-active {
   background-color: #F5C451 !important;
 }
-
-/* .swiper-scrollbar-drag {
-  background-color: #F5C451 !important  ;
-} */

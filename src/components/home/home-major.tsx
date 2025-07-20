@@ -9,22 +9,6 @@ import { Heading, Paragraph } from "../ui/typography";
 import { defaultTransition } from "../animation/transition";
 import { useTooltipOnTruncate } from "../ui/tooltip-hover";
 
-//ganti sesuai API prodi_Short
-// const majorLinkData = [
-//   {
-//     text: "Informatika",
-//     slide: "TI",
-//   },
-//   {
-//     text: "Agribisnis",
-//     slide: "Pertanian",
-//   },
-//   {
-//     text: "Pemesinan",
-//     slide: "Pemesinan",
-//   },
-// ];
-
 const HomeMajor = () => {
   const [currentSlide, setCurrentSlide] = useState("TI");
   const navHighlight = useAnimation();
@@ -49,16 +33,13 @@ const HomeMajor = () => {
     }));
   }, [majors]);
 
-  // Ref untuk mengakses elemen nav
   const navItemRefs = useRef<(HTMLElement | null)[]>([]);
   const navContainerRef = useRef<HTMLDivElement>(null);
   
-  // Function untuk menghitung posisi dan lebar secara real-time
   const calculateNavHighlight = useCallback((targetSlide: string) => {
   const targetIndex = majorLinkData.findIndex(item => item.slide === targetSlide);
   
   if (targetIndex === -1 || !navItemRefs.current[targetIndex] || !navContainerRef.current) {
-    // Fallback dinamis berdasarkan jumlah item
     const fallbackWidth = majorLinkData.length > 0 ? `${100 / majorLinkData.length}%` : "25%";
     return { x: 0, width: fallbackWidth };
   }
@@ -93,7 +74,6 @@ useEffect(() => {
   const observeResize = () => {
     if (navContainerRef.current) {
       const resizeObserver = new ResizeObserver(() => {
-        // kalkulasi posisi ketika container berubah
         if (currentSlide) {
           const position = calculateNavHighlight(currentSlide);
           navHighlight.set(position);
@@ -111,7 +91,6 @@ useEffect(() => {
 
 useEffect(() => {
   if (majorLinkData.length > 0 && currentSlide) {
-    // Delay untuk memastikan DOM sudah ter-render
     setTimeout(() => {
       const position = calculateNavHighlight(currentSlide);
       navHighlight.set(position);
@@ -138,7 +117,6 @@ const handleSlideChange = useCallback(
 const getNavGridClass = useCallback(() => {
   const itemCount = majorLinkData.length;
   
-  // Max 8
   switch (itemCount) {
     case 1: return "grid-cols-1";
     case 2: return "grid-cols-2";
@@ -153,11 +131,11 @@ const getNavGridClass = useCallback(() => {
 const getContainerMaxWidth = useCallback(() => {
   const itemCount = majorLinkData.length;
   
-  if (itemCount <= 2) return "max-w-sm"; // ~24rem
-  if (itemCount <= 3) return "max-w-md"; // ~28rem  
-  if (itemCount <= 4) return "max-w-[26rem]"; // original
-  if (itemCount <= 5) return "max-w-2xl"; // ~42rem
-  return "max-w-4xl"; // ~56rem
+  if (itemCount <= 2) return "max-w-sm";
+  if (itemCount <= 3) return "max-w-md"; 
+  if (itemCount <= 4) return "max-w-[26rem]";
+  if (itemCount <= 5) return "max-w-2xl";
+  return "max-w-4xl";
 }, [majorLinkData.length]);
 
   return (

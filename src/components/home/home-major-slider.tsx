@@ -22,10 +22,10 @@ const HomeMajorSlider = ({ majorData }: HomeMajorSliderProps) => {
             spaceBetween={15}
             slidesPerView={"auto"}
             modules={[Autoplay, FreeMode]}
-            className="flex justify-center items-center  w-full xl:min-h-[24rem] px-4 1xl:ml-5"
+            className={`flex ${majorData && majorData?.length < 4 ? "justify-center items-center" : ""} w-full xl:min-h-[24rem] px-4 1xl:ml-5`}
           >
             {majorData?.map((data, index) => (
-              <SwiperSlide key={index} className="flex w-full  ">
+              <SwiperSlide key={index}>
                 <Link href={"/academic/major/" + data.id_jurusan} key={index}>
                   <div className="flex justify-end items-center flex-col relative bg-black rounded-[10px] overflow-hidden w-[13rem] h-[18rem] xl:w-[18.75rem] xl:h-[25rem]">
                     <Image
@@ -48,18 +48,6 @@ const HomeMajorSlider = ({ majorData }: HomeMajorSliderProps) => {
                 </Link>
               </SwiperSlide>
             ))}
-            {majorData &&
-              majorData.length < 4 &&
-              [...Array(4 - majorData.length)].map((_, index) => (
-                <SwiperSlide key={`dummy-${index}`} className="flex w-full ">
-                  <div className=" flex justify-end items-center flex-col relative bg-gray-300 rounded-[10px] overflow-hidden w-[13rem] h-[18rem] xl:w-[18.75rem] xl:h-[25rem]">
-                    <div className="absolute text-center pb-4 w-full flex justify-center items-center flex-col gap-4">
-                      <div className="w-2/4 bg-gray-100 p-2 rounded-md"></div>
-                      <div className="w-3/4 hidden xl:block p-2 bg-gray-200 rounded-md"></div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
           </Swiper>
         </>
       ) : (

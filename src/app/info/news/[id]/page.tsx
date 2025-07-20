@@ -124,7 +124,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   <div className="p-2 xs:p-4 bg-gray-medium rounded-[10px]">
                     <Image
                       src={backendUrl + newsDetails?.published_by.img}
-                      alt="smknusa-icon"
+                      alt={newsDetails?.published_by.name || "Publisher"}
                       width={50}
                       height={50}
                       className="w-14 h-14 "
