@@ -13,11 +13,7 @@ const NavigationDropdownIcon = ({ show }: NavigationDropdownProps) => {
   const isMobile = useMediaQuery("only screen and (max-width: 1023.98px)");
   return (
     <Image
-      src={`${
-        !show && activePage && !isMobile
-          ? `/assets/icon/dropdown-white.svg`
-          : "/assets/icon/dropdown.svg"
-      }`}
+      src={`/assets/icon/dropdown.svg`}
       alt="dropdown"
       height={20}
       width={20}

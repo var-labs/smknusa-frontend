@@ -25,7 +25,7 @@ interface NavigationItemProps {
   name: string;
   dropdown?: boolean;
   show: boolean;
-  route?: string;
+  route?: string | null;
 }
 
 const slugify = (text: string): string => {
@@ -116,17 +116,17 @@ const NavigationItem = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownControls = useAnimation();
   const basePathname = usePathname();
-  const { navbars} = useNavbar()
+  const { navbars } = useNavbar()
   const pathname = "/" + basePathname.split("/")[1];
   const isMobile = useMediaQuery("only screen and (max-width: 1023.98px)");
   const { activePage } = useActivePage();
-const dropdownData = useMemo(() => {
-  return navbars ? convertNavbarJsonToDropdownData(navbars) : {};
-}, [navbars]);
+  const dropdownData = useMemo(() => {
+    return navbars ? convertNavbarJsonToDropdownData(navbars) : {};
+  }, [navbars]);
 
-const currentDropdownData = useMemo(() => {
-  return currentDropdown ? dropdownData[currentDropdown] ?? [] : [];
-}, [dropdownData, currentDropdown]);
+  const currentDropdownData = useMemo(() => {
+    return currentDropdown ? dropdownData[currentDropdown] ?? [] : [];
+  }, [dropdownData, currentDropdown]);
 
 
   const handleOpenDropdown = () => {
@@ -140,6 +140,8 @@ const currentDropdownData = useMemo(() => {
     setShowDropdown(false);
   };
 
+  console.log(route, 'output route')
+
   return (
     <>
       <div
@@ -150,20 +152,18 @@ const currentDropdownData = useMemo(() => {
           onMouseEnter={() => handleOpenDropdown()}
           className={`font-semibold  relative flex justify-center items-center  gap-1   rounded-md  w-min-content
           before:border-0 before:absolute before:bottom-0 before:right-0 before:border-transparent before:transition-colors before:duration-500
-          before:w-full hover:before:border-[1px] hover:before:left-0 hover:before:border-[#F5C451] cursor-pointer z-20 ${
-            route === pathname
+          before:w-full hover:before:border-[1px] hover:before:left-0 hover:before:border-[#F5C451] cursor-pointer z-20 ${route === pathname
               ? "opacity-100 before:border-[1px] "
               : pathname === "/"
-              ? "opacity-100"
-              : "opacity-60"
-          } `}
+                ? "opacity-100"
+                : "opacity-60"
+            } `}
         >
           <span
-            className={`hidden xl:block ${
-              show || !activePage ? "text-blue-base" : "text-white"
-            }`}
+            className={`hidden xl:block text-blue-base`}
           >
-            <Link href={route || ""}>{name}</Link>
+            {route ? <Link href={route || ""}>{name}</Link> : name}
+
           </span>
           {dropdown && (
             <motion.div animate={{ rotate: showDropdown ? 180 : 0 }}>
@@ -174,7 +174,7 @@ const currentDropdownData = useMemo(() => {
         {route === "/e-raport" || route === "/w-bkk" ? null : (
           <AnimatePresence>
             {showDropdown && (
-              <div className="absolute left-0 xs:left-4 md:left-14  xl:left-auto xl:ml-6  xl:top-auto h-[25rem] xl:h-auto xl:justify-start xl:items-start flex flex-col items-end justify-end">
+              <div className="absolute left-0 xs:left-4 md:left-14  xl:left-auto xl:-ml-[20rem]  xl:top-auto h-[25rem] xl:h-auto xl:justify-start xl:items-start flex flex-col items-end justify-end">
                 <motion.div
                   initial="initial"
                   animate="animate"
@@ -185,7 +185,7 @@ const currentDropdownData = useMemo(() => {
                     exit: { opacity: 0, y: 10 },
                   }}
                   transition={defaultTransition}
-                  className={cn(`min-w-[17rem] xs:min-w-[19rem] border-none max-h-[calc(80vh-4rem)] overflow-y-auto sm:min-w-[20rem] relative w-[90%] xl:w-[26rem] items-center justify-center grid grid-cols-2 xl:gap-0 h-fit xl:h-full xl:grid-cols-1 xl:mt-14 z-20 rounded-tl-[10px] xl:rounded-b-[10px] rounded-r-[10px] bg-white bg-opacity-100 shadow-lg xl:top-5 before:border-b-white xl:pb-0 pb-8 
+                  className={cn(`min-w-[17rem] xs:min-w-[19rem] border-none max-h-[calc(80vh-4rem)] overflow-y-auto sm:min-w-[20rem] relative w-[90%] xl:w-[26rem] items-center justify-center grid grid-cols-2 xl:gap-0 h-fit xl:h-full xl:grid-cols-1 xl:mt-12 z-20 rounded-tl-[10px] xl:rounded-b-[10px] rounded-r-[10px] bg-white bg-opacity-100 shadow-lg xl:top-5 before:border-b-white xl:pb-0 pb-8 
                     before:content-[''] xl:before:block before:hidden before:absolute before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[14px] before:top-[-13.6px]  before:left-2
                   scrollbar scrollbar-w-[6px] scrollbar-thumb-[#F5C451] scrollbar-track-yellow-100`)}
                 >
