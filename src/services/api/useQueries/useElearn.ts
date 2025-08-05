@@ -34,10 +34,6 @@ export const useElearn = () => {
       return data ?? [];
     },
   });
-  if (elearn == undefined) {
-    console.log("get data returned undefined");
-  } else {
-  }
 
-  return { elearn, isElearnLoading };
+  return { elearn, isElearnLoading};
 };

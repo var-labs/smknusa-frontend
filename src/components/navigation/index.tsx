@@ -3,34 +3,32 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
-import { useActiveToast } from "@/contexts/ActiveToastContext";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItem from "./navigation-item";
-import NavigationLanguage from "./navigation-language";
 import NavigationSearch from "./navigation-search";
 import NavigationSearchResult from "./navigation-search-result";
 import NavigationHamburger from "./navigation-hamburger";
-import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 const Navbar = () => {
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const isMobile = useMediaQuery("only screen and (max-width : 1023.98px)");
+  const isTablet = useMediaQuery("only screen and (max-width : 1023.98px)");
   const { activePage } = useActivePage();
   const pathname = usePathname();
   const [searchToggle, setSearchToggle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { navbars, isNavbarsLoading } = useNavbar();
-  const { handleActiveUnavailableToast } = useActiveToast();
+  const { navbars } = useNavbar();
+  // const { handleActiveUnavailableToast } = useActiveToast();
   const [currentDropdown, setCurrentDropdown] = useState<string | null>(
     "Akademik"
   );
 
   useEffect(() => {
     const controlNavbar = () => {
-      if (isMobile) {
+      if (isTablet) {
         if (showMenu) {
           setShow(true);
         } else {
@@ -54,7 +52,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("scroll", controlNavbar);
     };
-  }, [lastScrollY, isMobile, showMenu]);
+  }, [lastScrollY, isTablet, showMenu]);
 
   const handleToggleMenu = () => {
     if (currentDropdown === null) {
@@ -67,10 +65,10 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`flex items-center xl:shadow-none shadow-md xl:mt-[15px] justify-center ${showMenu ? "" : "xl:rounded-lg"
+        className={`flex items-center  shadow-md xl:mt-[15px] justify-center ${showMenu ? "" : "xl:rounded-lg"
           } bg-white z-40 text-blue-base  xl:max-w-[98%] 
         ${pathname.startsWith("/print") ? "hidden" : ""}
-        fixed w-full delay-0`}
+        fixed w-full delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"}`}
       >
         <div
           className={`flex items-center justify-center md:max-w-md-content lg:max-w-lg-content xl:max-w-full w-full py-3 rounded-[10px] px-4 2xl:px-11 bg-opacity-100 bg-white font-[800]`}
@@ -94,41 +92,80 @@ const Navbar = () => {
               </div>
             </Link>
             <div className="flex xl:justify-center gap-7 items-center w-auto   font-[600] ">
-              <NavigationSearch
+              {!isTablet && (<NavigationSearch
                 show={show}
                 searchToggle={searchToggle}
                 setSearchToggle={setSearchToggle}
-              />
+              />)}
               <div
-                className={`xl:flex hidden justify-center items-center gap-8 text-gray-light`}
+                className={`xl:flex hidden  justify-center items-center gap-8 ${!show && activePage ? "text-white" : " text-gray-light"
+                  }`}
               >
-                {navbars?.map((navbarItem) => {
-                  const hasDropdown = !!navbarItem.sub_navbar?.length;
-                  const name = typeof navbarItem.title === "string" ? navbarItem.title : "";
-                  const route = typeof navbarItem.route === "string"
-                    ? navbarItem.route
-                    : null;
-
-                  return (
-                    <NavigationItem
-                      key={typeof navbarItem.id === "string" || typeof navbarItem.id === "number"
-                        ? navbarItem.id
-                        : JSON.stringify(navbarItem.id)}
-                      name={name}
-                      show={show}
-                      dropdown={hasDropdown}
-                      route={route}
+                {!navbars || navbars.length === 0 ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-24 h-6 rounded bg-gray-300 animate-pulse"
                     />
-                  );
-                })}
+                  ))
+                ) :
+                  (navbars?.map((navbarItem) => {
+                    const hasDropdown = !!navbarItem.sub_navbar?.length;
+                    const name = typeof navbarItem.title === "string" ? navbarItem.title : "";
+                    const route = typeof navbarItem.route === "string"
+                      ? navbarItem.route
+                      : null;
+
+                    return (
+                      <NavigationItem
+                        key={typeof navbarItem.id === "string" || typeof navbarItem.id === "number"
+                          ? navbarItem.id
+                          : JSON.stringify(navbarItem.id)}
+                        name={name}
+                        show={show}
+                        dropdown={hasDropdown}
+                        route={route}
+                      />
+                    );
+                  }))
+                }
               </div>
             </div>
+
+            {isTablet &&
+              <div className="flex items-center justify-end xl:space-x-4 gap-4 xl:gap-0 w-[195px] pr-2">
+                <NavigationSearch
+                  show={show}
+                  searchToggle={searchToggle}
+                  setSearchToggle={setSearchToggle}
+                />
+                {(!showMenu ? (
+                  <Image
+                    src={"/assets/icon/hamburger.svg"}
+                    alt="hamburger"
+                    width={25}
+                    height={25}
+                    className="w-6 h-6 "
+                    onClick={() => handleToggleMenu()}
+                  />
+                ) : (
+                  <Image
+                    src={"/assets/icon/close-square-blue.svg"}
+                    alt="hamburger"
+                    width={25}
+                    height={25}
+                    className="w-6 h-6 "
+                    onClick={() => handleToggleMenu()}
+                  />
+                ))}
+              </div>
+            }
 
           </div>
         </div>
       </div>
 
-      {isMobile && !pathname.startsWith("/print") ? (
+      {isTablet && !pathname.startsWith("/print") ? (
         <>
           <NavigationHamburger
             currentDropdown={currentDropdown}

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { Paragraph } from "@/components/ui/typography";
 import { useArticles } from "@/services/api/useQueries/useArticles";
 import Pagination from "../../ui/pagination";
@@ -19,15 +20,15 @@ const ArticleCard = ({
     end_date: string;
   };
 }) => {
-  const { articles, isArticlesLoading } = useArticles(undefined, 1, articleFilter);
   const [currentPage, setCurrentPage] = useState(1);
+  const { articles, isArticlesLoading } = useArticles(undefined, currentPage, articleFilter);
   const postsPerPage = articles?.pagination?.per_page || 9;
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentArticleData = articles?.data?.slice(indexOfFirstPost, indexOfLastPost);
+  const currentArticleData = articles?.data
+  const queryClient = useQueryClient();
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    queryClient.invalidateQueries({ queryKey: ['articles'] });
   };
 
   return (
@@ -71,6 +72,7 @@ const ArticleCard = ({
                   totalPosts={articles?.pagination.total}
                   postsPerPage={postsPerPage}
                   onPageChange={onPageChange}
+                  currentPage={currentPage}
                 />
               </div>
             )}

@@ -115,7 +115,7 @@ const StudentsTable = ({
                 Alamat
               </th>
               <th scope="col" className="px-6 py-3">
-                TTL
+                Tempat, Tanggal Lahir
               </th>
               <th scope="col" className="px-6 py-3">
                 Jenis Kelamin
@@ -179,7 +179,7 @@ const StudentsTable = ({
                       </td>
                       <td className="px-6 py-4 md:table-cell flex gap-2 justify-between items-center">
                         <span className="block md:hidden text-sm font-bold text-blue-base">
-                          TTL
+                          Tempat, Tanggal Lahir
                         </span>
                         {student.tempat_lahir}, {student.tanggal_lahir}
                       </td>

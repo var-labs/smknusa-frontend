@@ -67,8 +67,8 @@ export default function Footer() {
             })}
         </div>
           
-          <div className="w-full mt-8 h-full 1xl:justify-between 1xl:items-end flex flex-col  lg:flex-row lg:items-center text-xs 1xl:text-base gap-4 1xl:gap-0 px-4 md:px-0 lg:px-0 xl:max-w-xl-content  md:max-w-md-content lg:max-w-lg-content  1xl:max-w-1xl-content 2xl:max-w-max-content">
-            <div className="flex flex-row 1xl:justify-between gap-4">
+          <div className="w-full mt-8 h-full 1xl:justify-between 1xl:items-end flex flex-col  xl:flex-row xl:items-center text-xs 1xl:text-base gap-4 1xl:gap-0 px-4 md:px-0 xl:px-0 xl:max-w-xl-content  md:max-w-md-content lg:max-w-lg-content  1xl:max-w-1xl-content 2xl:max-w-max-content">
+            <div className="flex flex-row 1xl:justify-between gap-4 lg:items-center">
               <Image
                 src={locationInfo?.logo || ""}
                 alt={locationInfo?.alias || ""}
@@ -80,7 +80,7 @@ export default function Footer() {
               </p>
             </div>
 
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+            <div className="flex flex-col xl:flex-row items-start xl:items-center gap-4">
               <div className="flex items-center gap-4">
                 <Image
                   src={emailInfo?.logo || ""}
@@ -116,8 +116,7 @@ export default function Footer() {
               className="w-10 xl:w-auto h-auto"
             />
             <div className="ml-2 font-[900] text-sm xl:text-lg ">
-              SMK NEGERI 1 <br />
-              PURWOSARI
+              SMK NEGERI 1 PURWOSARI
             </div>
           </Link>
 

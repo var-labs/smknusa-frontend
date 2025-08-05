@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 
@@ -6,11 +7,11 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
 import { cn } from "@/utils/cn";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItemAnimate from "./navigation-item-animate";
 import { defaultTransition } from "../animation/transition";
 import { NavigationDropdownMenuItem } from "./navigation-dropdown-menu-item";
 import NavigationDropdown from "./navigation-dropdown-icon";
-import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 export type NavigationLinkData = {
   linkDropdownData: {
@@ -27,35 +28,6 @@ interface NavigationItemProps {
   show: boolean;
   route?: string | null;
 }
-
-const slugify = (text: string): string => {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
-};
-
-const getDescription = (title: string): string => {
-  const descriptions: { [key: string]: string } = {
-    "Sambutan Kepala Sekolah": "Berisi sambutan resmi dari kepala sekolah",
-    "Visi dan Misi": "Berisi Informasi Visi dan Misi SMK",
-    "Struktur Organisasi Sekolah": "Berisi Tatanan Struktur Organisasi SMK",
-    "Program Kerja Sekolah": "Berisi Tatanan Program Kerja SMK",
-    "Komite Sekolah": "Berisi Tatanan Komite SMK",
-    "Fasilitas Sekolah": "Berisi Detail Kelengkapan Fasilitas SMK",
-    "Sejarah Sekolah": "Berisi Informasi Mengenai Sejarah Berdirinya SMK",
-    "Data Warga Sekolah": "Berisi Data Warga SMK Negeri 1 Purwosari",
-    "Ekstrakurikuler": "Berisi Data Ekstrakulikuler SMK Negeri 1 Purwosari",
-    "E-Learning": "Berisi Informasi E-Learning yang di Gunakan SMK",
-    "PPDB": "Berisi Link untuk Menuju ke Website PPDB",
-    "Jurusan": "Berisi Data Jurusan SMK Negeri 1 Purwosari",
-    "Form Perangkat Ajar": "Berisi Data Perangkat Ajar SMK Negeri 1 Purwosari",
-    "Berita": "Berisi Informasi Mengenai Berita yang Ada di SMK",
-    "Artikel": "Berisi Informasi Mengenai Artikel Yang Ada di SMK",
-  };
-
-  return descriptions[title] || "Deskripsi belum tersedia";
-};
 
 const generateLinkRef = (parentTitle: string, route: string): string => {
   if (route.startsWith("http")) return route;
@@ -77,7 +49,7 @@ const generateLinkRef = (parentTitle: string, route: string): string => {
       break;
   }
 
-  return `${prefix}${route.startsWith("/") ? "" : "/"}${route.replace(/^\//, "")}`;
+  return `${prefix}${route.startsWith("/") ? "/" : ""}${route.replace(/^\//, "")}`;
 };
 
 const convertNavbarJsonToDropdownData = (json: any): { [key: string]: NavigationLinkData[] } => {
@@ -87,18 +59,32 @@ const convertNavbarJsonToDropdownData = (json: any): { [key: string]: Navigation
     if (item.sub_navbar && Array.isArray(item.sub_navbar)) {
       const categoryKey = item.title;
 
-      map[categoryKey] = item.sub_navbar.map((sub: any) => {
-        const iconPath = `/assets/nav-dropdown-icon/${item.title.toLowerCase()}/${slugify(sub.title)}.svg`;
+      const dropdownItem: NavigationLinkData[] = [];
 
-        return {
-          linkDropdownData: {
-            text: sub.title,
-            description: sub.description,
-            icon: iconPath,
-            linkRef: generateLinkRef(item.title, sub.route),
-          },
-        };
-      });
+      item.sub_navbar.forEach((sub: any) => {
+        if (Array.isArray(sub.children) && sub.children.length > 0) {
+          sub.children.forEach((child: any) => {
+            dropdownItem.push({
+              linkDropdownData: {
+                text: sub.title + " " +child.title,
+                description: child.description || "",
+                icon: child.icon,
+                linkRef: generateLinkRef(item.title, `/e-learn/${child.route}`),
+              }
+            })
+          })
+        } else {
+          dropdownItem.push({
+            linkDropdownData: {
+              text: sub.title,
+              description: sub.description || "",
+              icon: sub.icon,
+              linkRef: generateLinkRef(item.title, sub.route),
+            },
+          });
+        }
+      }); 
+      map[categoryKey] = dropdownItem;
     }
   });
 
@@ -152,7 +138,7 @@ const NavigationItem = ({
           onMouseEnter={() => handleOpenDropdown()}
           className={`font-semibold  relative flex justify-center items-center  gap-1   rounded-md  w-min-content
           before:border-0 before:absolute before:bottom-0 before:right-0 before:border-transparent before:transition-colors before:duration-500
-          before:w-full hover:before:border-[1px] hover:before:left-0 hover:before:border-[#F5C451] cursor-pointer z-20 ${route === pathname
+          before:w-full hover:before:border-[1px] hover:before:left-0 hover:before:border-[#F5C451] cursor-pointer z-20 ${'/' + name.toLowerCase() === pathname
               ? "opacity-100 before:border-[1px] "
               : pathname === "/"
                 ? "opacity-100"

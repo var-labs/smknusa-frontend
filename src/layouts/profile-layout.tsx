@@ -20,7 +20,7 @@ const ProfileLayout = ({
   return (
     <div
       className={cn(
-        "w-full flex bg-gray-base justify-center  xl:pt-24 min-h-screen rounded-[10px] text-blue-base",
+        "w-full flex bg-gray-base justify-center min-h-screen rounded-[10px] text-blue-base",
         classNameWrapper
       )}
     >
@@ -37,7 +37,7 @@ const ProfileLayout = ({
           </div>
           <div
             className={cn(
-              `flex flex-col items-center gap-10 xl:gap-20 w-full`,
+              `flex flex-col items-center gap-5 xl:gap-10 w-full`,
               className
             )}
           >

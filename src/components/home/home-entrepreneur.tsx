@@ -23,12 +23,12 @@ const HomeEntrepreneur = () => {
           membina SMK Negeri 1 Purwosari.
         </Paragraph>
 
-        <hr className="bg-white mt-8 xl:mt-[52px]  w-full px-4 lg:px-0 md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container" />
+        <hr className="bg-white mt-8 xl:mt-[52px] w-full px-4 lg:px-0 md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container" />
         <ClientOnly>
           <HomeEntrepreneurSlider />
         </ClientOnly>
       </div>
-      <div className="relative xl:-top-[12%] px-4 xl:px-8 1xl:-top-[10%] -mt-32 xl:mt-0 mb-10 xl:mb-0 w-full flex justify-center">
+      <div className="relative xl:-top-[12%] px-4 xl:px-8 1xl:-top-[10%] -mt-8 xl:mt-0 mb-10 xl:mb-0 w-full flex justify-center">
         <ClientOnly>
           <HomeEntrepreneurVideo />
         </ClientOnly>

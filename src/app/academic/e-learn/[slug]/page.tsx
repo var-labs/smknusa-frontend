@@ -2,16 +2,22 @@
 
 import Image from "next/image";
 import React from "react";
-import Link from "next/link";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { cn } from "@/utils/cn";
 import { useElearn } from "@/services/api/useQueries/useElearn";
 import { backendUrl } from "@/utils/backendUrl";
+import { slugify } from "@/utils/slugify";
 
-const Page = () => {
-  const { elearn } = useElearn();
+export default function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  const { elearn, isElearnLoading } = useElearn();
 
-  const imageUrl = elearn?.[0]?.thumbnail ? `${backendUrl}${elearn?.[0].thumbnail}` : "";
+  const elearnData = elearn?.find((item) => slugify(item.title) === slug);
+
+  if (isElearnLoading) return <div className="mt-[65px] xl:mt-24">Loading...</div>;
+  if (!elearnData) return <div>Data tidak ditemukan</div>;
+
+  const imageUrl = elearnData.thumbnail ? `${backendUrl}${elearnData.thumbnail}` : "";
 
   return (
     <div className="flex xl:min-h-screen flex-col items-center gap-3 ">
@@ -24,52 +30,43 @@ const Page = () => {
                 type="h1"
                 className={cn("xl:!text-[46px] text-center lg:!text-[32px] ")}
               >
-                {elearn?.[0]?.title}
+                {elearnData?.title}
               </Heading>
               <Heading
                 type="h5"
                 className="text-center font-medium text-xs lg:text-base xl:text-[18px] md:w-[28rem] lg:w-[38rem] xl:w-[708px]"
               >
-               {elearn?.[0]?.desc}
+               {elearnData?.desc}
               </Heading>
               <div className="flex justify-center gap-3 xl:gap-6 items-center">
-                <button className="px-6 py-2 bg-white rounded-lg flex justify-center items-center gap-4">
-                  <Image
-                    src={backendUrl + elearn?.[0]?.btn_icon || ""}
-                    alt="teams"
-                    draggable={false}
-                    width={30}
-                    height={30}
-                    className="w-[27px] "
-                  />
-                  <Link
-                    href={
-                      elearn?.[0]?.btn_url || ""
-                    }
-                    className="font-medium text-sm text-blue-base"
-                  >
-                    {elearn?.[0]?.btn_label}
-                  </Link>
-                </button>
-                <button className="px-6 py-[10.5px] bg-white rounded-lg flex justify-center items-center gap-4">
-                  <Image
-                    src={backendUrl + elearn?.[0]?.btn_icon_2 || ""}
-                    draggable={false}
-                    alt="download"
-                    width={30}
-                    height={30}
-                    className="w-[14px] xl:w-[18px] "
-                  />
-                  <Link
-                    href={
-                      elearn?.[0]?.btn_url_2 || ""
-                    }
-                    className="font-medium text-sm text-blue-base"
-                  >
-                    {elearn?.[0]?.btn_label_2}
-                  </Link>
-                </button>
+                  {[1, 2].map((n) => {
+                    type BtnKey = "btn_url" | "btn_url_2" | "btn_icon" | "btn_icon_2" | "btn_label" | "btn_label_2";
+                    const urlKey: BtnKey = n === 1 ? "btn_url" : "btn_url_2";
+                    const iconKey: BtnKey = n === 1 ? "btn_icon" : "btn_icon_2";
+                    const labelKey: BtnKey = n === 1 ? "btn_label" : "btn_label_2";
+                    const url = elearnData?.[urlKey];
+                    const icon = elearnData?.[iconKey];
+                    const label = elearnData?.[labelKey];
 
+                    return (
+                      <a
+                        key={n}
+                        href={url?.startsWith("http") ? url : `https://${url}`}
+                        className="min-w-[170px] px-6 py-2 bg-white rounded-lg flex justify-center items-center gap-3 font-medium text-sm text-blue-base text-center"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Image
+                          src={backendUrl + icon}
+                          alt={label || "button-icon"}
+                          width={24}
+                          height={24}
+                          className="w-[20px] h-[20px] object-contain"
+                          draggable={false}
+                        />
+                        {label}
+                      </a>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -83,49 +80,13 @@ const Page = () => {
                 type="h5"
                 className="font-semibold xl:text-xl 1xl:text-2xl text-blue-base"
               >
-                {elearn?.[0]?.subtitle}
+                {elearnData?.subtitle}
               </Heading>
               <Paragraph className="font-medium text-xs sm:text-sm 1xl:text-[18px] 1xl:leading-7">
-                {elearn?.[0]?.body_desc}
+                {elearnData?.body_desc}
               </Paragraph>
               <div className="flex flex-wrap items-center gap-[22px] my-4">
-                {/* <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
-                  <Image
-                    src={backendUrl + elearn?.[0]?.badge?.[0]?.icon || ""}
-                    alt="lock"
-                    width={30}
-                    height={30}
-                    className="w-[18px] "
-                  />
-                  <span className="font-medium text-xs 1xl:text-sm text-blue-base">
-                    {elearn?.[0]?.badge?.[0]?.label || ""}
-                  </span>
-                </button>
-                <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
-                  <Image
-                    src={"/assets/icon/tick-square.svg"}
-                    alt="tick-square"
-                    width={30}
-                    height={30}
-                    className="w-[18px] "
-                  />
-                  <span className="font-medium text-xs 1xl:text-sm text-blue-base">
-                    Mudah
-                  </span>
-                </button>
-                <button className="px-3 1xl:px-6 py-3 bg-white rounded-lg flex justify-center items-center gap-4 border-2 ">
-                  <Image
-                    src={"/assets/icon/settings.svg"}
-                    alt="settings"
-                    width={30}
-                    height={30}
-                    className="w-[18px] "
-                  />
-                  <span className="font-medium text-xs 1xl:text-sm text-blue-base">
-                    Fitur Banyak
-                  </span>
-                </button> */}
-                {elearn?.[0]?.badge?.map((badge) => (
+                {elearnData?.badge?.map((badge) => (
                   console.log(badge),
                   <button
                     key={badge.id}
@@ -144,8 +105,8 @@ const Page = () => {
                   </button>
                 ))}
               </div>
-              <Link
-                href={elearn?.[0]?.body_url || ""}
+              <a
+                href={elearnData?.body_url || ""}
                 className="border-none w-full py-3 1xl:py-4 px-6 border-2 border-primary flex justify-between items-center  text-blue-base bg-yellow-light rounded-md"
               >
                 <span className="text-xs sm:text-base">Pelajari lebih</span>
@@ -156,11 +117,11 @@ const Page = () => {
                   height={30}
                   className="w-4 sm:w-[18px] "
                 />
-              </Link>
+              </a>
             </div>
             <Image
-              src={backendUrl + elearn?.[0]?.body_thumbnail || ""}
-              alt={elearn?.[0]?.title || "E-Learn Thumbnail"}
+              src={backendUrl + elearnData?.body_thumbnail || ""}
+              alt={elearnData?.title || "E-Learn Thumbnail"}
               draggable={false}
               width={580}
               height={580}
@@ -172,5 +133,3 @@ const Page = () => {
     </div>
   );
 };
-
-export default Page;

@@ -12,17 +12,8 @@ const ProfileSchoolCommittee = () => {
     <ProfileLayout
       title="Komite Sekolah"
       subtitle="Memberitahu informasi mengenai komite sekolah"
-      classNameWrapper="pt-[70px]"
+      classNameWrapper="pt-[100px]"
     >
-      {/* <PDFViewer
-        className="mt-10"
-        url={
-          (schoolCommittee &&
-            schoolCommittee?.[0] &&
-            schoolCommittee?.[0]?.profile_data) ||
-          ""
-        }
-      /> */}
       <DynamicSchoolContentRenderer data={schoolCommittee ?? []}/>
     </ProfileLayout>
   );

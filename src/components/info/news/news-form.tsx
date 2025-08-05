@@ -1,4 +1,6 @@
-import React, { SetStateAction } from "react";
+"use client";
+
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Image from "next/image";
 import { useNews } from "@/services/api/useQueries/useNews";
@@ -22,6 +24,12 @@ type NewsFilterFormProps = {
 
 const NewsForm = ({ newsFilter, setNewsFilter }: NewsFilterFormProps) => {
   const { refetch, categoriesNews } = useNews();
+  const [localSearch, setLocalSearch] = useState(newsFilter.search);
+
+  useEffect(() => {
+    setLocalSearch(newsFilter.search);
+  }, [newsFilter.search]);
+
   const handleOnClick = (type: "reset" | "search") => {
     switch (type) {
       case "reset":
@@ -34,6 +42,10 @@ const NewsForm = ({ newsFilter, setNewsFilter }: NewsFilterFormProps) => {
         refetch();
         break;
       case "search":
+        setNewsFilter({
+          ...newsFilter,
+          search: localSearch,
+        });
         refetch();
         break;
       default:
@@ -57,13 +69,9 @@ const NewsForm = ({ newsFilter, setNewsFilter }: NewsFilterFormProps) => {
                   type="text"
                   id="title"
                   name="title"
-                  value={newsFilter.search}
-                  onChange={(e) =>
-                    setNewsFilter({
-                      ...newsFilter,
-                      search: e.target.value,
-                    })
-                  }
+                  placeholder="Cari judul berita"
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
                   className="1xl:w-[107%] h-10 border border-gray-300 rounded-lg p-2"
                 />
               </div>

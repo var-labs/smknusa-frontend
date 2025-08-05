@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { motion, useAnimation } from "framer-motion";
 
@@ -34,7 +34,6 @@ const HomeFacility = () => {
     controls.start("animate");
   };
 
-
   const facilityLinkData = React.useMemo(() => {
     if(!facilities || facilities.length === 0) return [];
 
@@ -51,6 +50,12 @@ const HomeFacility = () => {
       majorFacility: prodiShort,
     }));
   }, [facilities, isMobile]);
+
+  useEffect(() => {
+    if (facilityLinkData.length > 0 && !currentSlide) {
+      setCurrentSlide(facilityLinkData[0].majorFacility);
+    }
+  }, [facilityLinkData, currentSlide]);
 
   return (
     <section className="w-full h-fit bg-white rounded-[10px] xl:overflow-hidden ">

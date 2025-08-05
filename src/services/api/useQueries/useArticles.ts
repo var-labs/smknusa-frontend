@@ -43,13 +43,13 @@ export const useArticles = (
     isLoading: isArticlesLoading,
     refetch,
   } = useQuery<ArticlesData| null>({
-    queryKey: ["Articles", filter],
-    queryFn: () => getArticles(filter),
+    queryKey: ["Articles", filter, page],
+    queryFn: () => getArticles(filter, page),
   });
 
   const { data: articleDetails, isLoading: isArticleDetailsLoading } =
     useQuery<Article | null>({
-      queryKey: ["ArticleDetails"],
+      queryKey: ["ArticleDetails", id],
       queryFn: () => getArticleDetails(id),
       enabled: !!id,
     });

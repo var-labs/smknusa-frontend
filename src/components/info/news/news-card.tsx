@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNews } from "@/services/api/useQueries/useNews";
 import { Paragraph } from "@/components/ui/typography";
 import InfoCardItemLoading from "@/components/ui/info-card-item-loading";
@@ -22,12 +23,12 @@ const NewsCard = ({
   const [currentPage, setCurrentPage] = useState(1);
   const { news, isNewsLoading } = useNews(undefined, currentPage, newsFilter);
   const postsPerPage = news?.pagination?.per_page || 9;
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentNewsData = news?.data?.slice(indexOfFirstPost, indexOfLastPost);
+  const currentNewsData = news?.data;
+  const queryClient = useQueryClient();
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    queryClient.invalidateQueries({ queryKey: ['news'] });
   };
 
   return (
@@ -71,6 +72,7 @@ const NewsCard = ({
                   totalPosts={news?.pagination.total}
                   postsPerPage={postsPerPage}
                   onPageChange={onPageChange}
+                  currentPage={currentPage}
                 />
               </div>
             )}

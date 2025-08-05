@@ -1,38 +1,21 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import React, { useMemo } from "react";
+import React from "react";
 import Link from "next/link";
+import { backendUrl } from "@/utils/backendUrl";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import { Heading, Paragraph } from "../ui/typography";
 import { defaultTransition } from "../animation/transition";
-import { useNavbar } from "@/services/api/useQueries/useNavbar";
 
 const slugify = (text: string): string => {
   return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
-};
-
-const getDescription = (title: string): string => {
-  const descriptions: { [key: string]: string } = {
-    "Sambutan Kepala Sekolah": "Berisi sambutan resmi dari kepala sekolah",
-    "Visi dan Misi": "Berisi Informasi Visi dan Misi SMK",
-    "Struktur Organisasi Sekolah": "Berisi Tatanan Struktur Organisasi SMK",
-    "Program Kerja Sekolah": "Berisi Tatanan Program Kerja SMK",
-    "Komite Sekolah": "Berisi Tatanan Komite SMK",
-    "Fasilitas Sekolah": "Berisi Detail Kelengkapan Fasilitas SMK",
-    "Sejarah Sekolah": "Berisi Informasi Mengenai Sejarah Berdirinya SMK",
-    "Data Warga Sekolah": "Berisi Data Warga SMK Negeri 1 Purwosari",
-    "Ekstrakurikuler": "Berisi Data Ekstrakulikuler SMK Negeri 1 Purwosari",
-    "E-Learning": "Berisi Informasi E-Learning yang di Gunakan SMK",
-    "PPDB": "Berisi Link untuk Menuju ke Website PPDB",
-    "Jurusan": "Berisi Data Jurusan SMK Negeri 1 Purwosari",
-    "Form Perangkat Ajar": "Berisi Data Perangkat Ajar SMK Negeri 1 Purwosari",
-    "Berita": "Berisi Informasi Mengenai Berita yang Ada di SMK",
-    "Artikel": "Berisi Informasi Mengenai Artikel Yang Ada di SMK",
-  };
-  return descriptions[title] || "Deskripsi belum tersedia";
 };
 
 const generateLinkRef = (parentTitle: string, route: string): string => {
@@ -53,7 +36,7 @@ const generateLinkRef = (parentTitle: string, route: string): string => {
       prefix = "/";
       break;
   }
-  return `${prefix}${route.startsWith("/") ? "" : "/"}${route.replace(/^\//, "")}`;
+  return `${prefix}${route.startsWith("/") ? "/" : ""}${route.replace(/^\//, "")}`;
 };
 
 const NavigationHamburger = ({
@@ -70,6 +53,19 @@ const NavigationHamburger = ({
   const { navbars } = useNavbar();
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+
+  // Helper function to calculate the actual number of rendered items
+  const calculateItemCount = (subNavbar: any[]) => {
+    let totalItems = 0;
+    subNavbar.forEach((sub: any) => {
+      if (Array.isArray(sub.children) && sub.children.length > 0) {
+        totalItems += sub.children.length;
+      } else {
+        totalItems += 1;
+      }
+    });
+    return totalItems;
+  };
 
   return (
     <motion.div
@@ -95,11 +91,7 @@ const NavigationHamburger = ({
                 animate={{
                   height:
                     openDropdown === name
-                      ? name === "Profile"
-                        ? "21rem"
-                        : name === "Info"
-                          ? "9.5rem"
-                          : "18rem"
+                      ? `${64 + (calculateItemCount(navbarItem.sub_navbar) * 40) + ((calculateItemCount(navbarItem.sub_navbar) - 1) * 16) + 32}px`
                       : "4rem",
                 }}
                 transition={defaultTransition}
@@ -137,18 +129,49 @@ const NavigationHamburger = ({
                   className="flex flex-col gap-4 absolute top-16"
                 >
                   {navbarItem.sub_navbar.map((sub: any, index: number) => {
-                    const iconPath = `/assets/nav-dropdown-icon/${name.toLowerCase()}/${slugify(
-                      sub.title
-                    )}.svg`;
+                    // Jika ada children, render children
+                    if (Array.isArray(sub.children) && sub.children.length > 0) {
+                      return sub.children.map((child: any) => (
+                        <Link
+                          key={`child-${child.id}`}
+                          href={`/academic/e-learn/${child.route}`}
+                          onClick={() => setShowMenu(false)}
+                          className="flex items-center gap-2"
+                        >
+                          <Image
+                            src={backendUrl + child.icon}
+                            alt={child.title}
+                            width={24}
+                            height={24}
+                            className="w-5 h-5"
+                          />
+                          <div className="flex flex-col">
+                            <Paragraph
+                              className={`font-medium text-base ${pathname === `/academic/e-learn/${child.route}`
+                                ? "text-primary"
+                                : "text-gray-light"
+                              }`}
+                            >
+                              {child.title}
+                            </Paragraph>
+                            <span className="text-xs text-gray-400">
+                              {child.description ?? ""}
+                            </span>
+                          </div>
+                        </Link>
+                      ));
+                    }
+
+                    // Jika tidak ada children, render item seperti biasa
                     return (
                       <Link
                         href={generateLinkRef(name, sub.route)}
-                        key={index}
+                        key={`sub-${sub.id}`}
                         onClick={() => setShowMenu(false)}
                         className="flex items-center gap-2"
                       >
                         <Image
-                          src={iconPath}
+                          src={backendUrl + sub.icon}
                           alt={sub.title}
                           width={24}
                           height={24}
@@ -157,19 +180,20 @@ const NavigationHamburger = ({
                         <div className="flex flex-col">
                           <Paragraph
                             className={`font-medium text-base ${pathname === generateLinkRef(name, sub.route)
-                                ? "text-primary"
-                                : "text-gray-light"
-                              }`}
+                              ? "text-primary"
+                              : "text-gray-light"
+                            }`}
                           >
                             {sub.title}
                           </Paragraph>
                           <span className="text-xs text-gray-400">
-                            {sub.description ?? sub.description}
+                            {sub.description ?? ""}
                           </span>
                         </div>
                       </Link>
                     );
                   })}
+
                 </motion.div>
                 <hr
                   className={`border  ${openDropdown === name ? "border-[#F5C451]" : "border-[#E2E8F0]"
@@ -178,7 +202,6 @@ const NavigationHamburger = ({
               </motion.div>
             );
           } else if (route) {
-            // Render as link if route exists
             return (
               <div
                 key={name}

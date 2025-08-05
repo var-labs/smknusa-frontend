@@ -3,9 +3,9 @@ import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useActivePage } from "@/contexts/ActivePageContext";
+import { backendUrl } from "@/utils/backendUrl";
 import { cn } from "@/utils/cn";
 import { NavigationLinkData } from "./navigation-item";
-import { backendUrl } from "@/utils/backendUrl";
 
 type NavigationItemAnimateProps = {
   itemData: NavigationLinkData;
@@ -62,8 +62,6 @@ const NavigationItemAnimate = ({
       opacity: 1,
     },
   };
-
-  console.log("itemData", backendUrl + itemData.linkDropdownData.icon);
 
   return (
     <motion.div

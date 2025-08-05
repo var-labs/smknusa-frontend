@@ -85,8 +85,10 @@ const PaginationTable: React.FC<PaginationTableProps> = ({
           .map((page, index) => (
             <button
               key={index}
-              className={`px-3 py-1 rounded-md ${
-                currentPage === page ? "bg-gray-base" : "bg-white"
+              className={`px-3 py-1 rounded-md font-semibold transition-colors duration-200 ${
+                currentPage === page
+                  ? "text-blue-base bg-gray-base"
+                  : "text-gray bg-white"
               }`}
               onClick={() =>
                 typeof page === "number" && handleButtonClick(page)

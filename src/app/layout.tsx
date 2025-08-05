@@ -39,7 +39,7 @@ export default function RootLayout({
           type="image/svg+xml"
         />
       </head>
-      <body className={`bg-gray-base ${montserrat.className}`}>
+      <body className={`bg-gray-base ${montserrat.className}`} suppressHydrationWarning={true}>
         <ActiveToastProvider>
           <ReactQueryProvider>
             <LenisProvider>

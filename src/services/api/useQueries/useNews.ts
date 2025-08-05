@@ -43,13 +43,13 @@ export const useNews = (
     isLoading: isNewsLoading,
     refetch,
   } = useQuery<NewsData | null>({
-    queryKey: ["News", filter],
+    queryKey: ["News", filter, page],
     queryFn: () => getNews(filter, page),
   });
 
   const { data: newsDetails, isLoading: isNewsDetailsLoading } =
     useQuery<News | null>({
-      queryKey: ["NewsDetails"],
+      queryKey: ["NewsDetails", id],
       queryFn: () => getNewsDetails(id),
       enabled: !!id,
     });
