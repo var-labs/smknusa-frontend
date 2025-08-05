@@ -3,6 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useActivePage } from "@/contexts/ActivePageContext";
+import { backendUrl } from "@/utils/backendUrl";
 import { cn } from "@/utils/cn";
 import { NavigationLinkData } from "./navigation-item";
 
@@ -74,7 +75,7 @@ const NavigationItemAnimate = ({
       )}
     >
       <Image
-        src={itemData.linkDropdownData.icon}
+        src={backendUrl + itemData.linkDropdownData.icon}
         alt={itemData.linkDropdownData.icon}
         width={40}
         height={40}

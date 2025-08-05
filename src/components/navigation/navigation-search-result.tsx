@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import { useSearches } from "@/services/api/useQueries/useSearches";
 import { defaultTransition } from "../animation/transition";
 import { Heading, Paragraph } from "../ui/typography";
@@ -18,6 +19,13 @@ const NavigationSearchResult = ({
   const [searchQuery, setSearchQuery] = useState("");
   const { searches, isSearchLoading } = useSearches({ query: searchQuery });
   // const [searchRecent, setSearchRecent] = useState([]);
+
+  const sanitizeAndParse = (dirtyHtml: string = "") => {
+    const cleanHtml = DOMPurify.sanitize(dirtyHtml);
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = cleanHtml;
+    return tempDiv.textContent || tempDiv.innerText || "";
+};
 
   useEffect(() => {
     if (!searchToggle) return;
@@ -203,7 +211,7 @@ const NavigationSearchResult = ({
                         data?.kemitraan_name ||
                         data?.loker_type
                       }
-                      description={
+                      description={sanitizeAndParse(
                         data?.text ||
                         data?.extra_text ||
                         data?.facility_text ||
@@ -214,6 +222,7 @@ const NavigationSearchResult = ({
                         data?.nip ||
                         data?.kemitraan_description ||
                         data?.kemitraan_id
+                      )
                       }
                     />
                   </motion.div>

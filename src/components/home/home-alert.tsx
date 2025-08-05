@@ -9,21 +9,36 @@ import { useAlert } from "@/services/api/useQueries/useAlert";
 import { defaultTransition } from "../animation/transition";
 import { Paragraph } from "../ui/typography";
 
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    window.addEventListener("resize", listener);
+    return () => window.removeEventListener("resize", listener);
+  }, [matches, query]);
+
+  return matches;
+};
+
 const HomeAlert = () => {
   const { alert, isAlertLoading } = useAlert();
   const [hover, setHover] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const pathname = usePathname();
+  const isMobile = useMediaQuery("(max-width: 576px)");
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
       setIsAtTop(currentScrollY === 0);
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -38,7 +53,7 @@ const HomeAlert = () => {
         y: isAtTop ? 0 : 60,
       }}
       transition={defaultTransition}
-      className=" fixed bottom-0 z-30 w-full "
+      className="fixed bottom-0 z-30 w-full"
     >
       <div className="bg-primary px-2 py-4 w-full h-full relative flex justify-center items-center">
         {alert && !isAlertLoading ? (
@@ -52,8 +67,10 @@ const HomeAlert = () => {
               <motion.div
                 initial={false}
                 transition={defaultTransition}
-                animate={{ x: hover ? -20 : 0 }}
-                className="flex justify-center gap-3  items-center"
+                animate={isMobile ? 
+                  { scale: hover ? 1.05 : 1, y: hover ? -2 : 0 } : 
+                  { x: hover ? -20 : 0 }}
+                className="flex justify-center gap-3 items-center"
               >
                 <Image
                   src={"/assets/icon/alert.svg"}

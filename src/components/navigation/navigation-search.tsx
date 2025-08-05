@@ -20,20 +20,14 @@ const NavigationSearch = ({
   return (
     <>
       <motion.div
-        className="cursor-pointer"
+        className="cursor-pointer hover:bg-gray-200 p-2 rounded-md"
         transition={defaultTransition}
         onClick={() => setSearchToggle(!searchToggle)}
       >
         <Image
           src={"/assets/icon/search.svg"}
           alt="search"
-          className={`${
-            !show && activePage
-              ? searchToggle
-                ? `invert-0`
-                : "xl:invert-0 invert"
-              : "invert"
-          } transition-all w-5 h-5 `}
+          className={`invert transition-all w-4 h-4 `}
           width={22}
           height={22}
         />

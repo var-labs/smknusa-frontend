@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { Paragraph } from "@/components/ui/typography";
 import { useArticles } from "@/services/api/useQueries/useArticles";
 import Pagination from "../../ui/pagination";
@@ -19,22 +20,22 @@ const ArticleCard = ({
     end_date: string;
   };
 }) => {
-  const { articles, isArticlesLoading } = useArticles(undefined, 1, articleFilter);
   const [currentPage, setCurrentPage] = useState(1);
+  const { articles, isArticlesLoading } = useArticles(undefined, currentPage, articleFilter);
   const postsPerPage = articles?.pagination?.per_page || 9;
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentArticleData = articles?.data?.slice(indexOfFirstPost, indexOfLastPost);
+  const currentArticleData = articles?.data
+  const queryClient = useQueryClient();
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    queryClient.invalidateQueries({ queryKey: ['articles'] });
   };
 
   return (
     <>
       <div className="flex flex-col justify-center items-center bg-white  -mt-10 xl:-mt-14 rounded-lg">
         {isArticlesLoading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8 p-4 1xl:px-12 pb-12 bg-white w-full 2xl:max-w-fit  rounded-[10px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8 lg:px-4 py-4 1xl:px-12 pb-12 bg-white w-full 2xl:max-w-fit  rounded-[10px]">
             {Array(6)
               .fill(0)
               .map((_, index) => (
@@ -71,6 +72,7 @@ const ArticleCard = ({
                   totalPosts={articles?.pagination.total}
                   postsPerPage={postsPerPage}
                   onPageChange={onPageChange}
+                  currentPage={currentPage}
                 />
               </div>
             )}

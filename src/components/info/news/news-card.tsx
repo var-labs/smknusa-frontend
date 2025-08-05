@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNews } from "@/services/api/useQueries/useNews";
 import { Paragraph } from "@/components/ui/typography";
 import InfoCardItemLoading from "@/components/ui/info-card-item-loading";
@@ -22,19 +23,19 @@ const NewsCard = ({
   const [currentPage, setCurrentPage] = useState(1);
   const { news, isNewsLoading } = useNews(undefined, currentPage, newsFilter);
   const postsPerPage = news?.pagination?.per_page || 9;
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentNewsData = news?.data?.slice(indexOfFirstPost, indexOfLastPost);
+  const currentNewsData = news?.data;
+  const queryClient = useQueryClient();
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    queryClient.invalidateQueries({ queryKey: ['news'] });
   };
 
   return (
     <>
       <div className="flex flex-col justify-center items-center bg-white -mt-10 xl:-mt-14  rounded-lg ">
         {isNewsLoading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8 p-4 1xl:px-12 pb-12 bg-white w-full 2xl:max-w-fit  rounded-[10px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8 lg:px-4 py-4 1xl:px-12 pb-12 bg-white w-full 2xl:max-w-fit  rounded-[10px]">
             {Array(6)
               .fill(0)
               .map((_, index) => (
@@ -45,7 +46,7 @@ const NewsCard = ({
           </div>
         ) : news.data && news?.data?.length > 0 ? (
           <div className="flex justify-center items-center flex-col w-full 2xl:w-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8  px-2 lg:px-4 py-4  1xl:px-12 pb-12 bg-white rounded-[10px] w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 1xl:grid-cols-3 gap-4 xl:gap-8 lg:px-4 py-4  1xl:px-12 pb-12 bg-white rounded-[10px] w-full">
               {currentNewsData?.map((news, index) => {
                 const date = new Date(news.created_at);
                 const normalDate = date.toLocaleDateString();
@@ -71,6 +72,7 @@ const NewsCard = ({
                   totalPosts={news?.pagination.total}
                   postsPerPage={postsPerPage}
                   onPageChange={onPageChange}
+                  currentPage={currentPage}
                 />
               </div>
             )}

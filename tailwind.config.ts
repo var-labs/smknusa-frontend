@@ -5,7 +5,13 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/contexts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/utils/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       scale: {
@@ -24,6 +30,7 @@ const config: Config = {
         "gray-base": "#F2F2F2",
         "gray-medium": "#E2E8F0",
         "yellow-light": "#FFD980",
+        "blue-base": "#081B34",
         yellow: "#F5C451",
         primary: "#081B34",
       },

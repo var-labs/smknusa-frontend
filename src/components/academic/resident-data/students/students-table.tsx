@@ -62,12 +62,12 @@ const StudentsTable = ({
   }
 
   return (
-    <div className="relative flex flex-col 1md:rounded-lg border w-full">
-      <div className="flex items-center justify-between mx-4 1md:mx-12 gap-4">
-        <div className="flex w-full flex-col sm:flex-row items-start sm:items-center justify-between 1md:justify-start gap-4">
+    <div className="relative flex flex-col 1xl:rounded-lg border w-full">
+      <div className="flex items-center justify-between mx-4 1xl:mx-12 gap-4">
+        <div className="flex w-full flex-col sm:flex-row items-start sm:items-center justify-between 1xl:justify-start gap-4">
           <Heading
             type="h5"
-            className="!text-sm font-bold text-blue-base 1md:w-fit my-6"
+            className="!text-sm font-bold text-blue-base 1xl:w-fit my-6"
           >
             Peserta Didik
           </Heading>
@@ -115,7 +115,7 @@ const StudentsTable = ({
                 Alamat
               </th>
               <th scope="col" className="px-6 py-3">
-                TTL
+                Tempat, Tanggal Lahir
               </th>
               <th scope="col" className="px-6 py-3">
                 Jenis Kelamin
@@ -179,7 +179,7 @@ const StudentsTable = ({
                       </td>
                       <td className="px-6 py-4 md:table-cell flex gap-2 justify-between items-center">
                         <span className="block md:hidden text-sm font-bold text-blue-base">
-                          TTL
+                          Tempat, Tanggal Lahir
                         </span>
                         {student.tempat_lahir}, {student.tanggal_lahir}
                       </td>

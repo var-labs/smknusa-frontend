@@ -2,8 +2,8 @@
 
 import React from "react";
 import ProfileLayout from "@/layouts/profile-layout";
-import PDFViewer from "@/components/ui/pdf-viewer";
 import { useSchool } from "@/services/api/useQueries/useSchool";
+import DynamicSchoolContentRenderer from "@/components/ui/dynamic-content-render";
 
 const ProfileStructure = () => {
   const { schoolStructure } = useSchool();
@@ -12,17 +12,9 @@ const ProfileStructure = () => {
     <ProfileLayout
       title="Struktur Organisasi Sekolah"
       subtitle="Struktur Organisasi Sekolah SMK Negeri 1 Purwosari"
-      classNameWrapper="pt-[70px]"
+      classNameWrapper="pt-[100px]"
     >
-      <PDFViewer
-        className="mt-10"
-        url={
-          (schoolStructure &&
-            schoolStructure?.[0] &&
-            schoolStructure?.[0]?.profile_data) ||
-          ""
-        }
-      />
+      <DynamicSchoolContentRenderer data={schoolStructure ?? []}/>
     </ProfileLayout>
   );
 };

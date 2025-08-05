@@ -1,14 +1,22 @@
 "use client";
 
-import React from 'react';
-import { useIsClient } from "@uidotdev/usehooks"
+import React, { useEffect, useState } from 'react';
 
 type ClientOnlyProps = {
   children: React.ReactNode;
+  fallback?: React.ReactNode;
 };
 
-export const ClientOnly: React.FC<ClientOnlyProps> = ({ children }) => {
-  const isClient = useIsClient();
+export const ClientOnly: React.FC<ClientOnlyProps> = ({ children, fallback = null }) => {
+  const [hasMounted, setHasMounted] = useState(false);
 
-  return isClient ? <>{children}</> : null;
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return <>{fallback}</>;
+  }
+
+  return <>{children}</>;
 };

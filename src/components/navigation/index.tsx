@@ -3,12 +3,11 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
-import { useActiveToast } from "@/contexts/ActiveToastContext";
+import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItem from "./navigation-item";
-import NavigationLanguage from "./navigation-language";
 import NavigationSearch from "./navigation-search";
 import NavigationSearchResult from "./navigation-search-result";
 import NavigationHamburger from "./navigation-hamburger";
@@ -16,19 +15,20 @@ import NavigationHamburger from "./navigation-hamburger";
 const Navbar = () => {
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const isMobile = useMediaQuery("only screen and (max-width : 1023.98px)");
+  const isTablet = useMediaQuery("only screen and (max-width : 1023.98px)");
   const { activePage } = useActivePage();
   const pathname = usePathname();
   const [searchToggle, setSearchToggle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { handleActiveUnavailableToast } = useActiveToast();
+  const { navbars } = useNavbar();
+  // const { handleActiveUnavailableToast } = useActiveToast();
   const [currentDropdown, setCurrentDropdown] = useState<string | null>(
     "Akademik"
   );
 
   useEffect(() => {
     const controlNavbar = () => {
-      if (isMobile) {
+      if (isTablet) {
         if (showMenu) {
           setShow(true);
         } else {
@@ -52,7 +52,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("scroll", controlNavbar);
     };
-  }, [lastScrollY, isMobile, showMenu]);
+  }, [lastScrollY, isTablet, showMenu]);
 
   const handleToggleMenu = () => {
     if (currentDropdown === null) {
@@ -61,36 +61,20 @@ const Navbar = () => {
     setShowMenu(!showMenu);
   };
 
+
   return (
     <>
       <div
-        className={`flex items-center  xl:shadow-none  shadow-md  justify-center ${
-          showMenu ? "" : "xl:rounded-lg"
-        } bg-white xl:bg-transparent  xl:px-2.5   z-40  transition-[padding,max-width,transform] ${
-          show
-            ? `  text-blue-base pt-0 xl:pt-2 `
-            : `  ${
-                activePage
-                  ? `-translate-y-20 xl:translate-y-0 xl:pt-8 xl:text-white  ${
-                      pathname === "/"
-                        ? ""
-                        : "xl:pt-1 xl:mt-[15px] xl:max-w-[98%]"
-                    } before:backdrop-blur-sm before:backdrop-hack `
-                  : "xl:translate-y-2 xl:pt-0 "
-              }`
-        } 
+        className={`flex items-center  shadow-md xl:mt-[15px] justify-center ${showMenu ? "" : "xl:rounded-lg"
+          } bg-white z-40 text-blue-base  xl:max-w-[98%] 
         ${pathname.startsWith("/print") ? "hidden" : ""}
-        fixed w-full  delay-0 `}
+        fixed w-full delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"}`}
       >
         <div
-          className={`flex  items-center justify-center  xl:shadow-md  md:max-w-md-content lg:max-w-lg-content xl:max-w-full   w-full py-3 transition-all rounded-[10px] px-4 2xl:px-11  ${
-            !show && activePage
-              ? "xl:bg-opacity-0  bg-white font-[800] xl:font-[900]"
-              : `bg-opacity-100 bg-white font-[800] `
-          }  `}
+          className={`flex items-center justify-center md:max-w-md-content lg:max-w-lg-content xl:max-w-full w-full py-3 rounded-[10px] px-4 2xl:px-11 bg-opacity-100 bg-white font-[800]`}
         >
-          <div className="flex  items-center w-full  2xl:max-w-[1492.8px] ">
-            <Link href={"/"} className="2xl:w-[52%] xl:w-[40%] w-full">
+          <div className="flex  items-center w-full justify-between  2xl:max-w-[1492.8px] ">
+            <Link href={"/"} className="">
               <div className="flex items-center">
                 <Image
                   src={"/assets/icon/logo-skansa.svg"}
@@ -101,87 +85,89 @@ const Navbar = () => {
                   className="w-10 xl:w-auto h-auto"
                 />
 
-                <h2 className="ml-2 text-sm xl:text-lg  ">
+                <h2 className="ml-2 text-sm xl:text-lg text-shadow-3d" style={{
+                  textShadow: '1px 1px 2px #696969',
+                }}>
                   SMK NEGERI 1 <br className="block" />
                   PURWOSARI
                 </h2>
               </div>
             </Link>
-            <div className="flex xl:justify-between  xl:w-full w-auto   font-[600] ">
+            <div className="flex xl:justify-center gap-7 items-center w-auto   font-[600] ">
+              {!isTablet && (<NavigationSearch
+                show={show}
+                searchToggle={searchToggle}
+                setSearchToggle={setSearchToggle}
+              />)}
               <div
-                className={`xl:flex hidden  justify-center items-center gap-8 ${
-                  !show && activePage ? "text-white" : " text-gray-light"
-                }`}
+                className={`xl:flex hidden  justify-center items-center gap-8 ${!show && activePage ? "text-white" : " text-gray-light"
+                  }`}
               >
-                <NavigationItem
-                  name="Profile"
-                  show={show}
-                  dropdown={true}
-                  route="/profile"
-                />
-                <NavigationItem
-                  name="Akademik"
-                  show={show}
-                  dropdown={true}
-                  route="/academic"
-                />
-                <NavigationItem name="BKK" show={show} route={"/w-bkk"} />
-                <NavigationItem
-                  name="Info"
-                  show={show}
-                  dropdown={true}
-                  route={"/info"}
-                />
-                <NavigationItem
-                  name="E-Raport"
-                  show={show}
-                  route={"/e-raport"}
-                />
+                {!navbars || navbars.length === 0 ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-24 h-6 rounded bg-gray-300 animate-pulse"
+                    />
+                  ))
+                ) :
+                  (navbars?.map((navbarItem) => {
+                    const hasDropdown = !!navbarItem.sub_navbar?.length;
+                    const name = typeof navbarItem.title === "string" ? navbarItem.title : "";
+                    const route = typeof navbarItem.route === "string"
+                      ? navbarItem.route
+                      : null;
+
+                    return (
+                      <NavigationItem
+                        key={typeof navbarItem.id === "string" || typeof navbarItem.id === "number"
+                          ? navbarItem.id
+                          : JSON.stringify(navbarItem.id)}
+                        name={name}
+                        show={show}
+                        dropdown={hasDropdown}
+                        route={route}
+                      />
+                    );
+                  }))
+                }
               </div>
-              <div className="flex items-center xl:space-x-4 gap-4 xl:gap-0 w-max">
+            </div>
+
+            {isTablet &&
+              <div className="flex items-center justify-end xl:space-x-4 gap-4 xl:gap-0 w-[195px] pr-2">
                 <NavigationSearch
                   show={show}
                   searchToggle={searchToggle}
                   setSearchToggle={setSearchToggle}
                 />
-                <NavigationLanguage show={show} />
-                <Image
-                  src={"/assets/icon/user-profile.svg"}
-                  alt="user"
-                  onClick={() => handleActiveUnavailableToast()}
-                  height={20}
-                  width={20}
-                  className={`${
-                    !show && activePage ? `xl:invert-0 invert` : "invert"
-                  } transition-all  w-5 h-5 hidden xl:block cursor-pointer`}
-                />
-                {isMobile &&
-                  (!showMenu ? (
-                    <Image
-                      src={"/assets/icon/hamburger.svg"}
-                      alt="hamburger"
-                      width={25}
-                      height={25}
-                      className="w-6 h-6 "
-                      onClick={() => handleToggleMenu()}
-                    />
-                  ) : (
-                    <Image
-                      src={"/assets/icon/close-square-blue.svg"}
-                      alt="hamburger"
-                      width={25}
-                      height={25}
-                      className="w-6 h-6 "
-                      onClick={() => handleToggleMenu()}
-                    />
-                  ))}
+                {(!showMenu ? (
+                  <Image
+                    src={"/assets/icon/hamburger.svg"}
+                    alt="hamburger"
+                    width={25}
+                    height={25}
+                    className="w-6 h-6 "
+                    onClick={() => handleToggleMenu()}
+                  />
+                ) : (
+                  <Image
+                    src={"/assets/icon/close-square-blue.svg"}
+                    alt="hamburger"
+                    width={25}
+                    height={25}
+                    className="w-6 h-6 "
+                    onClick={() => handleToggleMenu()}
+                  />
+                ))}
               </div>
-            </div>
+            }
+
           </div>
         </div>
       </div>
 
-      {isMobile && !pathname.startsWith("/print") ? (
+      {isTablet && !pathname.startsWith("/print") ? (
         <>
           <NavigationHamburger
             currentDropdown={currentDropdown}

@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure CSS loads before JavaScript */
+html {
+  visibility: visible !important;
+}
+
+/* Prevent flash of unstyled content */
+.loading {
+  visibility: hidden;
+}
+
 @layer utilities {
     .backdrop-hack {
       @apply absolute inset-0 -z-10;
@@ -33,7 +43,6 @@
 
 .swiper-wrapper {
   display: flex;
-  width: 100%;
 }
 
 /* SCOPED SWIPER STYLE */
@@ -66,7 +75,3 @@
 .swiper-pagination-bullet-active {
   background-color: #F5C451 !important;
 }
-
-/* .swiper-scrollbar-drag {
-  background-color: #F5C451 !important  ;
-} */

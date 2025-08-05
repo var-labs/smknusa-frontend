@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Image from "next/image";
 import { useArticles } from "@/services/api/useQueries/useArticles";
@@ -25,6 +25,11 @@ const ArticleForm = ({
   setArticleFilter,
 }: ArticleFilterFormProps) => {
   const { refetch, categoriesArticles } = useArticles();
+  const [localSearch, setLocalSearch] = useState(articleFilter.search);
+
+  useEffect(() => {
+    setLocalSearch(articleFilter.search);
+  }, [articleFilter.search]);
 
   const handleOnClick = (type: "reset" | "search") => {
     switch (type) {
@@ -38,6 +43,10 @@ const ArticleForm = ({
         refetch();
         break;
       case "search":
+        setArticleFilter({
+          ...articleFilter,
+          search: localSearch,
+        })
         refetch();
         break;
       default:
@@ -62,13 +71,9 @@ const ArticleForm = ({
                   type="text"
                   id="title"
                   name="title"
-                  value={articleFilter.search}
-                  onChange={(e) =>
-                    setArticleFilter({
-                      ...articleFilter,
-                      search: e.target.value,
-                    })
-                  }
+                  placeholder="Cari judul artikel"
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
                   className="1xl:w-[107%] h-10 border border-gray-300 rounded-lg p-2"
                 />
               </div>

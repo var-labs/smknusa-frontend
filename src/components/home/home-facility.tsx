@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { motion, useAnimation } from "framer-motion";
 
@@ -15,10 +15,10 @@ import HomeFacilityCardStack from "./home-facility-card-stack";
 
 const HomeFacility = () => {
   const isMobile = useMediaQuery("only screen and (max-width : 1024px)");
-  const [currentSlide, setCurrentSlide] = useState("TI");
+  const [currentSlide, setCurrentSlide] = useState("");
   const { facilities } = useFacilities();
   const facilityCardData = facilities?.filter(
-    (facility: Facility) => facility.prodi.prodi_short === currentSlide
+    (facility: Facility) => facility.prodi.nama_prodi === currentSlide
   );
   const [isChangingSlide, setIsChangingSlide] = useState(false);
 
@@ -34,24 +34,28 @@ const HomeFacility = () => {
     controls.start("animate");
   };
 
-  const getFacilityLinkText = (text: string, altText: string) => {
-    return isMobile ? text : altText;
-  };
+  const facilityLinkData = React.useMemo(() => {
+    if(!facilities || facilities.length === 0) return [];
 
-  const facilityLinkData = [
-    {
-      text: getFacilityLinkText("Informatika", "Informatika dan Elektronika"),
-      majorFacility: "TI",
-    },
-    {
-      text: getFacilityLinkText("Agribisnis", "Agribisnis dan Agroteknologi"),
-      majorFacility: "Pertanian",
-    },
-    {
-      text: getFacilityLinkText("Rekayasa", "Teknologi dan Rekayasa"),
-      majorFacility: "Pemesinan",
-    },
-  ];
+    const getFacilityLinkText = (text: string, altText: string) => {
+      return isMobile ? text : altText;
+    };
+
+    const uniqueProdiShorts = Array.from(
+      new Set(facilities.map((facility: Facility) => facility.prodi.nama_prodi))
+    );
+
+    return uniqueProdiShorts.map(prodiShort => ({
+      text: getFacilityLinkText(prodiShort, prodiShort),
+      majorFacility: prodiShort,
+    }));
+  }, [facilities, isMobile]);
+
+  useEffect(() => {
+    if (facilityLinkData.length > 0 && !currentSlide) {
+      setCurrentSlide(facilityLinkData[0].majorFacility);
+    }
+  }, [facilityLinkData, currentSlide]);
 
   return (
     <section className="w-full h-fit bg-white rounded-[10px] xl:overflow-hidden ">
@@ -70,7 +74,7 @@ const HomeFacility = () => {
 
         <hr className="bg-white hidden xl:block mt-8 xl:mt-[52px] w-full px-4 lg:px-0 md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container" />
 
-        <div className="flex my-6 xl:my-12  xl:gap-0 gap-8 justify-center items-center  w-full px-4 lg:px-0 md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container ">
+        <div className="flex my-6 xl:my-12 xl:gap-0 gap-8 justify-center items-center  w-full px-4 lg:px-0 md:max- w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container ">
           <div className="max-w-max-container flex xl:justify-between w-full items-center xl:px-4 gap-8 ">
             {facilityLinkData?.map((data, index) => {
               return (
