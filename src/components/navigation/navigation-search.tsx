@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React, { Dispatch, SetStateAction } from "react";
 import { motion } from "framer-motion";
-import { useActivePage } from "@/contexts/ActivePageContext";
 import { defaultTransition } from "../animation/transition";
 
 interface NavigationSearchProps {
@@ -15,7 +14,9 @@ const NavigationSearch = ({
   searchToggle,
   setSearchToggle,
 }: NavigationSearchProps) => {
-  const { activePage } = useActivePage();
+
+
+  console.log(show);
 
   return (
     <>

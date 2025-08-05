@@ -5,7 +5,6 @@ import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import Link from "next/link";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
-import { useActivePage } from "@/contexts/ActivePageContext";
 import { cn } from "@/utils/cn";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
 import NavigationItemAnimate from "./navigation-item-animate";
@@ -105,7 +104,6 @@ const NavigationItem = ({
   const { navbars } = useNavbar()
   const pathname = "/" + basePathname.split("/")[1];
   const isMobile = useMediaQuery("only screen and (max-width: 1023.98px)");
-  const { activePage } = useActivePage();
   const dropdownData = useMemo(() => {
     return navbars ? convertNavbarJsonToDropdownData(navbars) : {};
   }, [navbars]);

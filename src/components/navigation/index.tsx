@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useMediaQuery, useWindowSize } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
