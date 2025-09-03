@@ -79,27 +79,33 @@ const HomePrincipalSpeech = () => {
     const parsedHtml = parse(sanitizedHtml);
 
   return (
-    <div className="w-full flex justify-center items-start bg-white 2xl:max-w-max-container xl:rounded-[10px] overflow-hidden relative mt-10">
+    <div className="w-full flex justify-center items-start bg-white md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-container xl:rounded-[10px] overflow-hidden relative mt-10">
       <div className="absolute bottom-0 w-full bg-gradient-to-t from-white to-transparent z-20 p-10 md:p-7 opacity-60" />
-      {principalSpeech?.[0]?.profile_image && (
-        <div className="hidden lg:block flex-shrink-0">
-          <Image
-            src={principalSpeech?.[0]?.profile_image || ""}
-            alt="Foto Kepala Sekolah"
-            width={500}
-            height={500}
-            draggable={false}
-            className="w-[30em] h-auto object-contain"
-          />
+      <div className="grid  xl:grid-cols-2">
+        {principalSpeech?.[0]?.profile_image && (
+          <div className="hidden lg:flex flex-shrink-0 py-8 justify-center items-center">
+            <Image
+              src={principalSpeech?.[0]?.profile_image || ""}
+              alt="Foto Kepala Sekolah"
+              width={1000}
+              height={1000}
+              draggable={false}
+              className="w-full max-w-sm h-auto object-cover rounded-lg"
+            />
+          </div>
+        )}
+        <div className="flex-1 flex-col py-8 px-4 space-y-10">
+          <div className="space-y-6">
+            <Heading type="h2" className="text-2xl lg:text-3xl font-medium !leading-none text-gray-800 mb-4 border-b border-gray-200 pb-6">
+              {principalSpeech?.[0]?.profile_name}
+            </Heading>
+            <div className="max-w-none">
+              <Paragraph className="max-h-[255px] xl:max-h-[380px] leading-relaxed overflow-y-auto pr-4 scrollbar scrollbar-w-1 scrollbar-thumb-[#F5C451] scrollbar-track-yellow-100">
+                {parsedHtml}
+              </Paragraph>
+            </div>
+          </div>
         </div>
-      )}
-      <div className="flex-1 flex-col py-8 px-4 space-y-10">
-        <Heading type="h2" className="text-xl lg:text-2xl xl:text-3xl font-semibold mb-2 xl:mb-4 text-center">
-          {principalSpeech?.[0]?.profile_name}
-        </Heading>
-        <Paragraph className="max-h-[480px] overflow-y-auto ">
-          {parsedHtml}
-        </Paragraph>
       </div>
     </div>
   )
