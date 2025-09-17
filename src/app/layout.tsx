@@ -10,6 +10,7 @@ import { ActiveToastProvider } from "@/contexts/ActiveToastContext";
 import UnavailableToast from "@/components/ui/unavailable-toast";
 import HomeAlert from "@/components/home/home-alert";
 import { LenisProvider } from "@/contexts/LenisScroll";
+import { AlertBannerProvider } from "@/contexts/AlertBannerContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -43,22 +44,25 @@ export default function RootLayout({
         <ActiveToastProvider>
           <ReactQueryProvider>
             <LenisProvider>
-              <HomeAlert />
-              <nav className="bg-gray-base xl:flex justify-center ">
-                <ClientOnly>
-                  <ActivePageProvider>
-                    <Navbar />
-                  </ActivePageProvider>
-                </ClientOnly>
-              </nav>
-              <main>
-                <UnavailableToast />
-                {children}
+              <AlertBannerProvider>
+                <HomeAlert />
+                <nav className="bg-gray-base xl:flex justify-center ">
+                  <ClientOnly>
+                    <ActivePageProvider>
+                      <Navbar />
+                    </ActivePageProvider>
+                  </ClientOnly>
+                </nav>
+                <main>
 
-                <footer>
-                  <Footer />
-                </footer>
-              </main>
+                  <UnavailableToast />
+                  {children}
+
+                  <footer>
+                    <Footer />
+                  </footer>
+                </main>
+              </AlertBannerProvider>
             </LenisProvider>
           </ReactQueryProvider>
         </ActiveToastProvider>

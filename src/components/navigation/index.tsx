@@ -7,6 +7,7 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import { usePathname } from "next/navigation";
 import { useActivePage } from "@/contexts/ActivePageContext";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
+import { useAlertBanner } from "@/contexts/AlertBannerContext";
 import NavigationItem from "./navigation-item";
 import NavigationSearch from "./navigation-search";
 import NavigationSearchResult from "./navigation-search-result";
@@ -21,6 +22,7 @@ const Navbar = () => {
   const [searchToggle, setSearchToggle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const { navbars } = useNavbar();
+  const { visible } = useAlertBanner();
   // const { handleActiveUnavailableToast } = useActiveToast();
   const [currentDropdown, setCurrentDropdown] = useState<string | null>(
     "Akademik"
@@ -65,15 +67,16 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`flex items-center  shadow-md xl:mt-[15px] justify-center ${showMenu ? "" : "xl:rounded-lg"
+        className={`flex items-center shadow-md justify-center ${showMenu ? "" : "xl:rounded-lg"
           } bg-white z-40 text-blue-base  xl:max-w-[98%] 
         ${pathname.startsWith("/print") ? "hidden" : ""}
-        fixed w-full delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"}`}
+        fixed w-full transition-all duration-500 ease-in-out delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"} ${visible ? "mt-[36px] lg:mt-[40px] xl:mt-[60px] xl:rounded-t-none" : " xl:mt-[15px] mt-0"}`
+      }
       >
         <div
           className={`flex items-center justify-center md:max-w-md-content lg:max-w-lg-content xl:max-w-full w-full py-3 rounded-[10px] px-4 2xl:px-11 bg-opacity-100 bg-white font-[800]`}
         >
-          <div className="flex  items-center w-full justify-between  2xl:max-w-[1492.8px] ">
+          <div className="flex items-center w-full justify-between  2xl:max-w-[1492.8px] ">
             <Link href={"/"} className="">
               <div className="flex items-center">
                 <Image
@@ -135,7 +138,7 @@ const Navbar = () => {
             </div>
 
             {isTablet &&
-              <div className="flex items-center justify-end xl:space-x-4 gap-4 xl:gap-0 w-[195px] pr-2">
+              <div className="flex items-center justify-end xl:space-x-4 gap-4 xl:gap-0 w-[130px] xs:w-[195px] pr-2">
                 <NavigationSearch
                   show={show}
                   searchToggle={searchToggle}

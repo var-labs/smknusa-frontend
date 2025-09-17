@@ -75,3 +75,19 @@ html {
 .swiper-pagination-bullet-active {
   background-color: #F5C451 !important;
 }
+
+@keyframes marquee-loop {
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-loop {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-loop 10s linear infinite;
+}
+

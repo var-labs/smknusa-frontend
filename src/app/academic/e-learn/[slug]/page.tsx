@@ -106,7 +106,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 ))}
               </div>
               <a
-                href={elearnData?.body_url || ""}
+                href={elearnData?.body_url.startsWith("http") ? elearnData?.body_url : `https://${elearnData?.body_url}` || ""}
                 className="border-none w-full py-3 1xl:py-4 px-6 border-2 border-primary flex justify-between items-center  text-blue-base bg-yellow-light rounded-md"
               >
                 <span className="text-xs sm:text-base">Pelajari lebih</span>
