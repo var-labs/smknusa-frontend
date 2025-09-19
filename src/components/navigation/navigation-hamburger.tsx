@@ -8,6 +8,7 @@ import React from "react";
 import Link from "next/link";
 import { backendUrl } from "@/utils/backendUrl";
 import { useNavbar } from "@/services/api/useQueries/useNavbar";
+import { useAlertBanner } from "@/contexts/AlertBannerContext";
 import { Heading, Paragraph } from "../ui/typography";
 import { defaultTransition } from "../animation/transition";
 
@@ -52,6 +53,7 @@ const NavigationHamburger = ({
 }) => {
   const { navbars } = useNavbar();
   const pathname = usePathname();
+  const { visible } = useAlertBanner();
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
   // Helper function to calculate the actual number of rendered items
@@ -72,7 +74,7 @@ const NavigationHamburger = ({
       initial={{ y: -1400 }}
       animate={{ y: showMenu ? 0 : -1400 }}
       transition={{ ...defaultTransition, type: "tween" }}
-      className={` fixed  left-0 w-full  min-h-screen bg-white top-[64px] z-30 flex flex-col items-center gap-4 ${showMenu ? "pointer-events-auto" : "pointer-events-none"
+      className={` fixed  left-0 w-full  min-h-screen bg-white ${visible ? "top-[64px]" : "top-[75px]"} z-30 flex flex-col items-center gap-4 ${showMenu ? "pointer-events-auto" : "pointer-events-none"
         }`}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4 px-6 mt-6 md:max-w-md-content lg:max-w-lg-content xl:max-w-xl-content 1xl:max-w-1xl-content 2xl:max-w-max-[1222px] w-full">

@@ -1,1 +1,1 @@
-export const backendUrl = "https://backend.rplsmknusa.com/";
+export const backendUrl = "https://backend.smkn1purwosari.sch.id//";

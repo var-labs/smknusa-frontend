@@ -63,6 +63,8 @@ const Navbar = () => {
     setShowMenu(!showMenu);
   };
 
+  console.log(navbars);
+
 
   return (
     <>
@@ -70,7 +72,7 @@ const Navbar = () => {
         className={`flex items-center shadow-md justify-center ${showMenu ? "" : "xl:rounded-lg"
           } bg-white z-40 text-blue-base  xl:max-w-[98%] 
         ${pathname.startsWith("/print") ? "hidden" : ""}
-        fixed w-full transition-all duration-500 ease-in-out delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"} ${visible ? "mt-[36px] lg:mt-[40px] xl:mt-[60px] xl:rounded-t-none" : " xl:mt-[15px] mt-0"}`
+        fixed w-full transition-all duration-500 ease-in-out delay-0 ${activePage ? "" : "xl:mt-[10px] xl:max-w-[98.5%]"} ${visible && pathname === "/" ? "mt-[36px] lg:mt-[40px] xl:mt-[60px] xl:rounded-t-none" : " xl:mt-[15px] mt-0"}`
       }
       >
         <div
